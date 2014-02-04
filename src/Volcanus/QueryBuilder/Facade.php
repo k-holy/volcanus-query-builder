@@ -77,14 +77,14 @@ class Facade
 		$metaColumns = $this->driver->getMetaColumns($tableName);
 		$expressions = array();
 		foreach ($metaColumns as $column) {
-			if (is_array($excludeKeys) && in_array($column->name, $excludeKeys)) {
+			$columnName = ($this->enableCamelize) ? $this->camelize($column->name) : $column->name;
+			if (is_array($excludeKeys) && in_array($columnName, $excludeKeys)) {
 				continue;
 			}
-			$alias = $this->enableCamelize ? $this->camelize($column->name) : $column->name;
 			$expressions[$column->name] = $this->expression(
 				isset($tableAlias) ? $tableAlias . '.' . $column->name : $tableName . '.' . $column->name,
 				$column->type,
-				array_key_exists($column->name, $columnAliases) ? $columnAliases[$column->name] : $alias
+				array_key_exists($columnName, $columnAliases) ? $columnAliases[$columnName] : $columnName
 			);
 		}
 		return $expressions;
@@ -115,7 +115,8 @@ class Facade
 	{
 		$metaColumns = $this->driver->getMetaColumns($tableName);
 		$expressions = array();
-		foreach ($columns as $columnName => $value) {
+		foreach ($columns as $name => $value) {
+			$columnName = $this->enableCamelize ? $this->underscore($name) : $name;
 			$noConvert = false;
 			if (0 === strncmp($columnName, QueryBuilder::PREFIX_NO_CONVERT, 1)) {
 				$columnName = substr($columnName, 1);
@@ -302,6 +303,9 @@ SQL;
 				$columnName = substr($columnName, 1);
 				$noConvert = true;
 			}
+			if ($this->enableCamelize) {
+				$columnName = $this->underscore($columnName);
+			}
 			if (!array_key_exists($columnName, $metaColumns)) {
 				throw new \RuntimeException(
 					sprintf('columnName "%s" is not defined in tableName "%s"', $columnName, $tableName)
@@ -358,6 +362,9 @@ SQL;
 			$desc = '';
 			if (isset($tableName) && preg_match('/\A\s*([a-zA-Z0-9_]+)(?:\s+(desc|asc))?\s*\z/i',$order, $matches)) {
 				$columnName = $matches[1];
+				if ($this->enableCamelize) {
+					$columnName = $this->underscore($columnName);
+				}
 				$desc = (isset($matches[2])) ? $matches[2] : '';
 				$sortKey = (isset($tableAlias)) ? "{$tableAlias}.{$columnName}" : "{$tableName}.{$columnName}";
 				$expressions[] = (strcmp($desc, '') != 0) ? "{$sortKey} {$desc}" : $sortKey;
@@ -382,7 +389,8 @@ SQL;
 		$metaColumns = $this->driver->getMetaColumns($tableName);
 		$expressions = array();
 		foreach ($metaColumns as $column) {
-			if (is_array($excludeKeys) && in_array($column->name, $excludeKeys)) {
+			$columnName = ($this->enableCamelize) ? $this->camelize($column->name) : $column->name;
+			if (is_array($excludeKeys) && in_array($columnName, $excludeKeys)) {
 				continue;
 			}
 			$expressions[$column->name] = (isset($tableAlias)) ? $tableAlias . '.' . $column->name : $tableName . '.' . $column->name;
@@ -455,6 +463,15 @@ SQL;
 	private function camelize($string)
 	{
 		return lcfirst(str_replace(' ', '', ucwords(str_replace('_', ' ', $string))));
+	}
+
+	/**
+	 * @param string  $string
+	 * @return string
+	 */
+	private function underscore($string)
+	{
+		return strtolower(preg_replace('/[A-Z]/', '_$0', lcfirst($string)));
 	}
 
 }
