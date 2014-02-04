@@ -60,6 +60,20 @@ SQL
 		);
 	}
 
+	private function createTableForEnableCamelize()
+	{
+		$pdo = $this->getPdo();
+		$pdo->exec(<<<SQL
+CREATE TABLE users(
+     user_id    INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL
+    ,user_name  TEXT
+    ,updated_at DATETIME NOT NULL
+    ,this_column_name_is_very_long TEXT
+);
+SQL
+		);
+	}
+
 	public function testExpression()
 	{
 		$facade = new Facade($this->getDriver(), $this->getBuilder());
@@ -77,6 +91,18 @@ SQL
 		$this->assertEquals("strftime('%Y-%m-%d %H:%i:%s', test.updated_at) AS \"updated_at\"", $expressions['updated_at']);
 	}
 
+	public function testExpressionsEnableCamelize()
+	{
+		$this->createTableForEnableCamelize();
+		$facade = new Facade($this->getDriver(), $this->getBuilder());
+		$facade->enableCamelize(true);
+		$expressions = $facade->expressions('users');
+		$this->assertEquals('users.user_id AS "userId"', $expressions['user_id']);
+		$this->assertEquals('users.user_name AS "userName"', $expressions['user_name']);
+		$this->assertEquals("strftime('%Y-%m-%d %H:%i:%s', users.updated_at) AS \"updatedAt\"", $expressions['updated_at']);
+		$this->assertEquals('users.this_column_name_is_very_long AS "thisColumnNameIsVeryLong"', $expressions['this_column_name_is_very_long']);
+	}
+
 	public function testExpressionsWithTableAlias()
 	{
 		$facade = new Facade($this->getDriver(), $this->getBuilder());
@@ -84,6 +110,18 @@ SQL
 		$this->assertEquals('t01.id AS "id"', $expressions['id']);
 		$this->assertEquals('t01.name AS "name"', $expressions['name']);
 		$this->assertEquals("strftime('%Y-%m-%d %H:%i:%s', t01.updated_at) AS \"updated_at\"", $expressions['updated_at']);
+	}
+
+	public function testExpressionsWithTableAliasEnableCamelize()
+	{
+		$this->createTableForEnableCamelize();
+		$facade = new Facade($this->getDriver(), $this->getBuilder());
+		$facade->enableCamelize(true);
+		$expressions = $facade->expressions('users', 'us1');
+		$this->assertEquals('us1.user_id AS "userId"', $expressions['user_id']);
+		$this->assertEquals('us1.user_name AS "userName"', $expressions['user_name']);
+		$this->assertEquals("strftime('%Y-%m-%d %H:%i:%s', us1.updated_at) AS \"updatedAt\"", $expressions['updated_at']);
+		$this->assertEquals('us1.this_column_name_is_very_long AS "thisColumnNameIsVeryLong"', $expressions['this_column_name_is_very_long']);
 	}
 
 	public function testExpressionsWithExcludeKeys()
@@ -95,6 +133,18 @@ SQL
 		$this->assertArrayNotHasKey('updated_at', $expressions);
 	}
 
+	public function testExpressionsWithExcludeKeysEnableCamelize()
+	{
+		$this->createTableForEnableCamelize();
+		$facade = new Facade($this->getDriver(), $this->getBuilder());
+		$facade->enableCamelize(true);
+		$expressions = $facade->expressions('users', null, array('updatedAt', 'thisColumnNameIsVeryLong'));
+		$this->assertArrayHasKey('user_id', $expressions);
+		$this->assertArrayHasKey('user_name', $expressions);
+		$this->assertArrayNotHasKey('updated_at', $expressions);
+		$this->assertArrayNotHasKey('this_column_name_is_very_long', $expressions);
+	}
+
 	public function testExpressionsWithColumnAliases()
 	{
 		$facade = new Facade($this->getDriver(), $this->getBuilder());
@@ -102,6 +152,18 @@ SQL
 		$this->assertEquals('test.id AS "id"', $expressions['id']);
 		$this->assertEquals('test.name AS "name"', $expressions['name']);
 		$this->assertEquals("strftime('%Y-%m-%d %H:%i:%s', test.updated_at) AS \"updated_at_formatted\"", $expressions['updated_at']);
+	}
+
+	public function testExpressionsWithColumnAliasesEnableCamelize()
+	{
+		$this->createTableForEnableCamelize();
+		$facade = new Facade($this->getDriver(), $this->getBuilder());
+		$facade->enableCamelize(true);
+		$expressions = $facade->expressions('users', null, null, array('updatedAt' => 'updatedAtFormatted'));
+		$this->assertEquals('users.user_id AS "userId"', $expressions['user_id']);
+		$this->assertEquals('users.user_name AS "userName"', $expressions['user_name']);
+		$this->assertEquals("strftime('%Y-%m-%d %H:%i:%s', users.updated_at) AS \"updatedAtFormatted\"", $expressions['updated_at']);
+		$this->assertEquals('users.this_column_name_is_very_long AS "thisColumnNameIsVeryLong"', $expressions['this_column_name_is_very_long']);
 	}
 
 	public function testParameter()
@@ -124,6 +186,24 @@ SQL
 		$this->assertEquals('1', $parameters['id']);
 		$this->assertEquals("'Foo'", $parameters['name']);
 		$this->assertEquals("datetime('2013-10-01 00:00:00')", $parameters['updated_at']);
+	}
+
+	public function testParametersEnableCamelize()
+	{
+		$this->createTableForEnableCamelize();
+		$facade = new Facade($this->getDriver(), $this->getBuilder());
+		$facade->enableCamelize(true);
+		$columns = array(
+			'userId'    => '1',
+			'userName'  => 'Foo',
+			'updatedAt' => new \DateTime('2013-10-01 00:00:00'),
+			'thisColumnNameIsVeryLong' => 'Bar',
+		);
+		$parameters = $facade->parameters('users', $columns);
+		$this->assertEquals('1', $parameters['user_id']);
+		$this->assertEquals("'Foo'", $parameters['user_name']);
+		$this->assertEquals("datetime('2013-10-01 00:00:00')", $parameters['updated_at']);
+		$this->assertEquals("'Bar'", $parameters['this_column_name_is_very_long']);
 	}
 
 	public function testInsert()
@@ -311,41 +391,17 @@ SQL
 		);
 	}
 
-	public function testEnableCamelize()
+	public function testSelectEnableCamelize()
 	{
-		$pdo = $this->getPdo();
-		$pdo->exec(<<<SQL
-CREATE TABLE users(
-     user_id    INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL
-    ,user_name  TEXT
-    ,updated_at DATETIME NOT NULL
-    ,this_column_name_is_very_long TEXT
-);
-SQL
-		);
-
+		$this->createTableForEnableCamelize();
 		$facade = new Facade($this->getDriver(), $this->getBuilder());
 		$facade->enableCamelize(true);
-
 		$this->assertEquals(<<<SQL
 SELECT
 users.user_id AS "userId",
 users.user_name AS "userName",
 strftime('%Y-%m-%d %H:%i:%s', users.updated_at) AS "updatedAt",
 users.this_column_name_is_very_long AS "thisColumnNameIsVeryLong"
-FROM
-users
-SQL
-			, $facade->select('users')
-		);
-
-		$facade->enableCamelize(false);
-		$this->assertEquals(<<<SQL
-SELECT
-users.user_id AS "user_id",
-users.user_name AS "user_name",
-strftime('%Y-%m-%d %H:%i:%s', users.updated_at) AS "updated_at",
-users.this_column_name_is_very_long AS "this_column_name_is_very_long"
 FROM
 users
 SQL
@@ -379,6 +435,18 @@ SQL
 		$this->assertEquals('test.id = 1', $expressions[0]);
 	}
 
+	public function testWhereExpressionsEqualEnableCamelize()
+	{
+		$this->createTableForEnableCamelize();
+		$facade = new Facade($this->getDriver(), $this->getBuilder());
+		$facade->enableCamelize(true);
+		$columns = array(
+			'userId' => '1',
+		);
+		$expressions = $facade->whereExpressions('users', null, $columns);
+		$this->assertEquals('users.user_id = 1', $expressions[0]);
+	}
+
 	public function testWhereExpressionsEqualWithTableAlias()
 	{
 		$facade = new Facade($this->getDriver(), $this->getBuilder());
@@ -387,6 +455,18 @@ SQL
 		);
 		$expressions = $facade->whereExpressions('test', 't01', $columns);
 		$this->assertEquals('t01.id = 1', $expressions[0]);
+	}
+
+	public function testWhereExpressionsEqualWithTableAliasEnableCamelize()
+	{
+		$this->createTableForEnableCamelize();
+		$facade = new Facade($this->getDriver(), $this->getBuilder());
+		$facade->enableCamelize(true);
+		$columns = array(
+			'userId' => '1',
+		);
+		$expressions = $facade->whereExpressions('users', 'us1', $columns);
+		$this->assertEquals('us1.user_id = 1', $expressions[0]);
 	}
 
 	public function testWhereExpressionsNotEqual()
@@ -399,6 +479,18 @@ SQL
 		$this->assertEquals('test.id <> 1', $expressions[0]);
 	}
 
+	public function testWhereExpressionsNotEqualEnableCamelize()
+	{
+		$this->createTableForEnableCamelize();
+		$facade = new Facade($this->getDriver(), $this->getBuilder());
+		$facade->enableCamelize(true);
+		$columns = array(
+			QueryBuilder::PREFIX_NEGATIVE . 'userId' => '1',
+		);
+		$expressions = $facade->whereExpressions('users', null, $columns);
+		$this->assertEquals('users.user_id <> 1', $expressions[0]);
+	}
+
 	public function testWhereExpressionsNotEqualWithTableAlias()
 	{
 		$facade = new Facade($this->getDriver(), $this->getBuilder());
@@ -407,6 +499,18 @@ SQL
 		);
 		$expressions = $facade->whereExpressions('test', 't01', $columns);
 		$this->assertEquals('t01.id <> 1', $expressions[0]);
+	}
+
+	public function testWhereExpressionsNotEqualWithTableAliasEnableCamelize()
+	{
+		$this->createTableForEnableCamelize();
+		$facade = new Facade($this->getDriver(), $this->getBuilder());
+		$facade->enableCamelize(true);
+		$columns = array(
+			QueryBuilder::PREFIX_NEGATIVE . 'userId' => '1',
+		);
+		$expressions = $facade->whereExpressions('users', 'us1', $columns);
+		$this->assertEquals('us1.user_id <> 1', $expressions[0]);
 	}
 
 	public function testWhereExpressionsIn()
@@ -419,6 +523,18 @@ SQL
 		$this->assertEquals('test.id IN (1,2,3)', $expressions[0]);
 	}
 
+	public function testWhereExpressionsInEnableCamelize()
+	{
+		$this->createTableForEnableCamelize();
+		$facade = new Facade($this->getDriver(), $this->getBuilder());
+		$facade->enableCamelize(true);
+		$columns = array(
+			'userId' => array('1', '2', '3'),
+		);
+		$expressions = $facade->whereExpressions('users', null, $columns);
+		$this->assertEquals('users.user_id IN (1,2,3)', $expressions[0]);
+	}
+
 	public function testWhereExpressionsInWithTableAlias()
 	{
 		$facade = new Facade($this->getDriver(), $this->getBuilder());
@@ -427,6 +543,18 @@ SQL
 		);
 		$expressions = $facade->whereExpressions('test', 't01', $columns);
 		$this->assertEquals('t01.id IN (1,2,3)', $expressions[0]);
+	}
+
+	public function testWhereExpressionsInWithTableAliasEnableCamelize()
+	{
+		$this->createTableForEnableCamelize();
+		$facade = new Facade($this->getDriver(), $this->getBuilder());
+		$facade->enableCamelize(true);
+		$columns = array(
+			'userId' => array('1', '2', '3'),
+		);
+		$expressions = $facade->whereExpressions('users', 'us1', $columns);
+		$this->assertEquals('us1.user_id IN (1,2,3)', $expressions[0]);
 	}
 
 	public function testWhereExpressionsNotIn()
@@ -439,6 +567,18 @@ SQL
 		$this->assertEquals('test.id NOT IN (1,2,3)', $expressions[0]);
 	}
 
+	public function testWhereExpressionsNotInEnableCamelize()
+	{
+		$this->createTableForEnableCamelize();
+		$facade = new Facade($this->getDriver(), $this->getBuilder());
+		$facade->enableCamelize(true);
+		$columns = array(
+			QueryBuilder::PREFIX_NEGATIVE . 'userId' => array('1', '2', '3'),
+		);
+		$expressions = $facade->whereExpressions('users', null, $columns);
+		$this->assertEquals('users.user_id NOT IN (1,2,3)', $expressions[0]);
+	}
+
 	public function testWhereExpressionsNotInWithTableAlias()
 	{
 		$facade = new Facade($this->getDriver(), $this->getBuilder());
@@ -447,6 +587,18 @@ SQL
 		);
 		$expressions = $facade->whereExpressions('test', 't01', $columns);
 		$this->assertEquals('t01.id NOT IN (1,2,3)', $expressions[0]);
+	}
+
+	public function testWhereExpressionsNotInWithTableAliasEnableCamelize()
+	{
+		$this->createTableForEnableCamelize();
+		$facade = new Facade($this->getDriver(), $this->getBuilder());
+		$facade->enableCamelize(true);
+		$columns = array(
+			QueryBuilder::PREFIX_NEGATIVE . 'userId' => array('1', '2', '3'),
+		);
+		$expressions = $facade->whereExpressions('users', 'us1', $columns);
+		$this->assertEquals('us1.user_id NOT IN (1,2,3)', $expressions[0]);
 	}
 
 	public function testWhereExpressionsIsNull()
@@ -459,6 +611,18 @@ SQL
 		$this->assertEquals('test.id IS NULL', $expressions[0]);
 	}
 
+	public function testWhereExpressionsIsNullEnableCamelize()
+	{
+		$this->createTableForEnableCamelize();
+		$facade = new Facade($this->getDriver(), $this->getBuilder());
+		$facade->enableCamelize(true);
+		$columns = array(
+			'userId' => 'NULL'
+		);
+		$expressions = $facade->whereExpressions('users', null, $columns);
+		$this->assertEquals('users.user_id IS NULL', $expressions[0]);
+	}
+
 	public function testWhereExpressionsIsNullWithTableAlias()
 	{
 		$facade = new Facade($this->getDriver(), $this->getBuilder());
@@ -467,6 +631,18 @@ SQL
 		);
 		$expressions = $facade->whereExpressions('test', 't01', $columns);
 		$this->assertEquals('t01.id IS NULL', $expressions[0]);
+	}
+
+	public function testWhereExpressionsIsNullWithTableAliasEnableCamelize()
+	{
+		$this->createTableForEnableCamelize();
+		$facade = new Facade($this->getDriver(), $this->getBuilder());
+		$facade->enableCamelize(true);
+		$columns = array(
+			'userId' => 'NULL'
+		);
+		$expressions = $facade->whereExpressions('users', 'us1', $columns);
+		$this->assertEquals('us1.user_id IS NULL', $expressions[0]);
 	}
 
 	public function testWhereExpressionsIsNotNull()
@@ -479,6 +655,18 @@ SQL
 		$this->assertEquals('test.id IS NOT NULL', $expressions[0]);
 	}
 
+	public function testWhereExpressionsIsNotNullEnableCamelize()
+	{
+		$this->createTableForEnableCamelize();
+		$facade = new Facade($this->getDriver(), $this->getBuilder());
+		$facade->enableCamelize(true);
+		$columns = array(
+			QueryBuilder::PREFIX_NEGATIVE . 'userId' => 'NULL'
+		);
+		$expressions = $facade->whereExpressions('users', null, $columns);
+		$this->assertEquals('users.user_id IS NOT NULL', $expressions[0]);
+	}
+
 	public function testWhereExpressionsIsNotNullWithTableAlias()
 	{
 		$facade = new Facade($this->getDriver(), $this->getBuilder());
@@ -487,6 +675,18 @@ SQL
 		);
 		$expressions = $facade->whereExpressions('test', 't01', $columns);
 		$this->assertEquals('t01.id IS NOT NULL', $expressions[0]);
+	}
+
+	public function testWhereExpressionsIsNotNullWithTableAliasEnableCamelize()
+	{
+		$this->createTableForEnableCamelize();
+		$facade = new Facade($this->getDriver(), $this->getBuilder());
+		$facade->enableCamelize(true);
+		$columns = array(
+			QueryBuilder::PREFIX_NEGATIVE . 'userId' => 'NULL'
+		);
+		$expressions = $facade->whereExpressions('users', 'us1', $columns);
+		$this->assertEquals('us1.user_id IS NOT NULL', $expressions[0]);
 	}
 
 	public function testWhereExpressionsNoConvert()
@@ -499,6 +699,18 @@ SQL
 		$this->assertEquals('test.id = (SELECT id FROM test WHERE 1=1)', $expressions[0]);
 	}
 
+	public function testWhereExpressionsNoConvertEnableCamelize()
+	{
+		$this->createTableForEnableCamelize();
+		$facade = new Facade($this->getDriver(), $this->getBuilder());
+		$facade->enableCamelize(true);
+		$columns = array(
+			QueryBuilder::PREFIX_NO_CONVERT . 'userId' => '= (SELECT user_id FROM users WHERE 1=1)'
+		);
+		$expressions = $facade->whereExpressions('users', null, $columns);
+		$this->assertEquals('users.user_id = (SELECT user_id FROM users WHERE 1=1)', $expressions[0]);
+	}
+
 	public function testWhereExpressionsNoConvertWithTableAlias()
 	{
 		$facade = new Facade($this->getDriver(), $this->getBuilder());
@@ -507,6 +719,147 @@ SQL
 		);
 		$expressions = $facade->whereExpressions('test', 't01', $columns);
 		$this->assertEquals('t01.id = (SELECT id FROM test WHERE 1=1)', $expressions[0]);
+	}
+
+	public function testWhereExpressionsNoConvertWithTableAliasEnableCamelize()
+	{
+		$this->createTableForEnableCamelize();
+		$facade = new Facade($this->getDriver(), $this->getBuilder());
+		$facade->enableCamelize(true);
+		$columns = array(
+			QueryBuilder::PREFIX_NO_CONVERT . 'userId' => '= (SELECT user_id FROM users WHERE 1=1)'
+		);
+		$expressions = $facade->whereExpressions('users', 'us1', $columns);
+		$this->assertEquals('us1.user_id = (SELECT user_id FROM users WHERE 1=1)', $expressions[0]);
+	}
+
+	public function testOrderByExpressions()
+	{
+		$facade = new Facade($this->getDriver(), $this->getBuilder());
+		$orders = array('id', 'name');
+		$expressions = $facade->orderByExpressions('test', null, $orders);
+		$this->assertEquals('test.id'  , $expressions[0]);
+		$this->assertEquals('test.name', $expressions[1]);
+	}
+
+	public function testOrderByExpressionsEnableCamelize()
+	{
+		$this->createTableForEnableCamelize();
+		$facade = new Facade($this->getDriver(), $this->getBuilder());
+		$facade->enableCamelize(true);
+		$orders = array('userId', 'userName');
+		$expressions = $facade->orderByExpressions('users', null, $orders);
+		$this->assertEquals('users.user_id'  , $expressions[0]);
+		$this->assertEquals('users.user_name', $expressions[1]);
+	}
+
+	public function testOrderByExpressionsAsc()
+	{
+		$facade = new Facade($this->getDriver(), $this->getBuilder());
+		$orders = array('id ASC', 'name ASC');
+		$expressions = $facade->orderByExpressions('test', null, $orders);
+		$this->assertEquals('test.id ASC'  , $expressions[0]);
+		$this->assertEquals('test.name ASC', $expressions[1]);
+	}
+
+	public function testOrderByExpressionsAscEnableCamelize()
+	{
+		$this->createTableForEnableCamelize();
+		$facade = new Facade($this->getDriver(), $this->getBuilder());
+		$facade->enableCamelize(true);
+		$orders = array('userId ASC', 'userName ASC');
+		$expressions = $facade->orderByExpressions('users', null, $orders);
+		$this->assertEquals('users.user_id ASC'  , $expressions[0]);
+		$this->assertEquals('users.user_name ASC', $expressions[1]);
+	}
+
+	public function testOrderByExpressionsDesc()
+	{
+		$facade = new Facade($this->getDriver(), $this->getBuilder());
+		$orders = array('id DESC', 'name DESC');
+		$expressions = $facade->orderByExpressions('test', null, $orders);
+		$this->assertEquals('test.id DESC'  , $expressions[0]);
+		$this->assertEquals('test.name DESC', $expressions[1]);
+	}
+
+	public function testOrderByExpressionsDescEnableCamelize()
+	{
+		$this->createTableForEnableCamelize();
+		$facade = new Facade($this->getDriver(), $this->getBuilder());
+		$facade->enableCamelize(true);
+		$orders = array('userId DESC', 'userName DESC');
+		$expressions = $facade->orderByExpressions('users', null, $orders);
+		$this->assertEquals('users.user_id DESC'  , $expressions[0]);
+		$this->assertEquals('users.user_name DESC', $expressions[1]);
+	}
+
+	public function testOrderByExpressionsWithTableAlias()
+	{
+		$facade = new Facade($this->getDriver(), $this->getBuilder());
+		$orders = array('id', 'name');
+		$expressions = $facade->orderByExpressions('test', 't01', $orders);
+		$this->assertEquals('t01.id'  , $expressions[0]);
+		$this->assertEquals('t01.name', $expressions[1]);
+	}
+
+	public function testOrderByExpressionsWithTableAliasEnableCamelize()
+	{
+		$this->createTableForEnableCamelize();
+		$facade = new Facade($this->getDriver(), $this->getBuilder());
+		$facade->enableCamelize(true);
+		$orders = array('userId', 'userName');
+		$expressions = $facade->orderByExpressions('users', 'us1', $orders);
+		$this->assertEquals('us1.user_id'  , $expressions[0]);
+		$this->assertEquals('us1.user_name', $expressions[1]);
+	}
+
+	public function testOrderByExpressionsAscWithTableAlias()
+	{
+		$facade = new Facade($this->getDriver(), $this->getBuilder());
+		$orders = array('id ASC', 'name ASC');
+		$expressions = $facade->orderByExpressions('test', 't01', $orders);
+		$this->assertEquals('t01.id ASC'  , $expressions[0]);
+		$this->assertEquals('t01.name ASC', $expressions[1]);
+	}
+
+	public function testOrderByExpressionsAscWithTableAliasEnableCamelize()
+	{
+		$this->createTableForEnableCamelize();
+		$facade = new Facade($this->getDriver(), $this->getBuilder());
+		$facade->enableCamelize(true);
+		$orders = array('userId ASC', 'userName ASC');
+		$expressions = $facade->orderByExpressions('users', 'us1', $orders);
+		$this->assertEquals('us1.user_id ASC'  , $expressions[0]);
+		$this->assertEquals('us1.user_name ASC', $expressions[1]);
+	}
+
+	public function testOrderByExpressionsDescWithTableAlias()
+	{
+		$facade = new Facade($this->getDriver(), $this->getBuilder());
+		$orders = array('id DESC', 'name DESC');
+		$expressions = $facade->orderByExpressions('test', 't01', $orders);
+		$this->assertEquals('t01.id DESC'  , $expressions[0]);
+		$this->assertEquals('t01.name DESC', $expressions[1]);
+	}
+
+	public function testOrderByExpressionsDescWithTableAliasEnableCamelize()
+	{
+		$this->createTableForEnableCamelize();
+		$facade = new Facade($this->getDriver(), $this->getBuilder());
+		$facade->enableCamelize(true);
+		$orders = array('userId DESC', 'userName DESC');
+		$expressions = $facade->orderByExpressions('users', 'us1', $orders);
+		$this->assertEquals('us1.user_id DESC'  , $expressions[0]);
+		$this->assertEquals('us1.user_name DESC', $expressions[1]);
+	}
+
+	public function testOrderByExpressionsWithoutTableName()
+	{
+		$facade = new Facade($this->getDriver(), $this->getBuilder());
+		$orders = array('t02.id DESC', 'RAND()');
+		$expressions = $facade->orderByExpressions(null, null, $orders);
+		$this->assertEquals('t02.id DESC'  , $expressions[0]);
+		$this->assertEquals('RAND()', $expressions[1]);
 	}
 
 	public function testEscapeLikePattern()
