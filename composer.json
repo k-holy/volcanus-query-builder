@@ -3,7 +3,7 @@
     "homepage": "https://github.com/k-holy/volcanus-query-builder",
     "type": "library",
     "description": "SQL builder for volcanus-database",
-    "version": "0.4.0",
+    "version": "0.4.1",
     "license": "MIT",
     "authors": [
         {
