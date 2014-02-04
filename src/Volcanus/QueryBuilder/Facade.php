@@ -29,10 +29,25 @@ class Facade
 	 */
 	private $builder;
 
+	/**
+	 * @var boolean 取得するカラム名をキャメルケースに変換するかどうか
+	 */
+	private $enableCamelize = false;
+
 	public function __construct(DriverInterface $driver, QueryBuilderInterface $builder)
 	{
 		$this->driver = $driver;
 		$this->builder = $builder;
+	}
+
+	/**
+	 * 取得するカラム名をキャメルケースに変換するかどうかを設定します。
+	 *
+	 * @param boolean 取得するカラム名をキャメルケースに変換するかどうか
+	 */
+	public function enableCamelize($enabled = true)
+	{
+		$this->enableCamelize = (bool)$enabled;
 	}
 
 	/**
@@ -65,10 +80,11 @@ class Facade
 			if (is_array($excludeKeys) && in_array($column->name, $excludeKeys)) {
 				continue;
 			}
+			$alias = $this->enableCamelize ? $this->camelize($column->name) : $column->name;
 			$expressions[$column->name] = $this->expression(
 				isset($tableAlias) ? $tableAlias . '.' . $column->name : $tableName . '.' . $column->name,
 				$column->type,
-				array_key_exists($column->name, $columnAliases) ? $columnAliases[$column->name] : $column->name
+				array_key_exists($column->name, $columnAliases) ? $columnAliases[$column->name] : $alias
 			);
 		}
 		return $expressions;
@@ -430,6 +446,15 @@ SQL;
 	public function escapeLikePattern($pattern, $escapeChar = '\\')
 	{
 		return $this->builder->escapeLikePattern($pattern, $escapeChar);
+	}
+
+	/**
+	 * @param string  $string
+	 * @return string
+	 */
+	private function camelize($string)
+	{
+		return lcfirst(str_replace(' ', '', ucwords(str_replace('_', ' ', $string))));
 	}
 
 }
