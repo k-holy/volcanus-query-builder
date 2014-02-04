@@ -311,6 +311,48 @@ SQL
 		);
 	}
 
+	public function testEnableCamelize()
+	{
+		$pdo = $this->getPdo();
+		$pdo->exec(<<<SQL
+CREATE TABLE users(
+     user_id    INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL
+    ,user_name  TEXT
+    ,updated_at DATETIME NOT NULL
+    ,this_column_name_is_very_long TEXT
+);
+SQL
+		);
+
+		$facade = new Facade($this->getDriver(), $this->getBuilder());
+		$facade->enableCamelize(true);
+
+		$this->assertEquals(<<<SQL
+SELECT
+users.user_id AS "userId",
+users.user_name AS "userName",
+strftime('%Y-%m-%d %H:%i:%s', users.updated_at) AS "updatedAt",
+users.this_column_name_is_very_long AS "thisColumnNameIsVeryLong"
+FROM
+users
+SQL
+			, $facade->select('users')
+		);
+
+		$facade->enableCamelize(false);
+		$this->assertEquals(<<<SQL
+SELECT
+users.user_id AS "user_id",
+users.user_name AS "user_name",
+strftime('%Y-%m-%d %H:%i:%s', users.updated_at) AS "updated_at",
+users.this_column_name_is_very_long AS "this_column_name_is_very_long"
+FROM
+users
+SQL
+			, $facade->select('users')
+		);
+	}
+
 	public function testLimitOffset()
 	{
 		$facade = new Facade($this->getDriver(), $this->getBuilder());
