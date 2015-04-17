@@ -13,12 +13,12 @@
     stopOnFailure="false"
     stopOnIncomplete="false"
     stopOnSkipped="false"
-    strict="true"
+    syntaxCheck="true"
     verbose="true"
 >
     <testsuites>
-        <testsuite name="Volcanus_Database">
-            <directory suffix="Test.php">./tests/Volcanus/QueryBuilder/Test/</directory>
+        <testsuite name="Volcanus_QueryBuilder">
+            <directory suffix="Test.php">./tests/Volcanus/QueryBuilder/Test</directory>
         </testsuite>
     </testsuites>
     <filter>
