@@ -12,13 +12,10 @@
         }
     ],
     "autoload": {
-        "psr-0": { "Volcanus\\QueryBuilder\\": "src/" }
+        "psr-4": { "Volcanus\\QueryBuilder\\": "src/" }
     },
     "require": {
         "php": ">=5.3.3",
         "volcanus/database": "dev-master"
-    },
-    "require-dev": {
-        "satooshi/php-coveralls": "dev-master"
     }
 }
