@@ -497,6 +497,106 @@ class MysqlParameterBuilderTest extends \PHPUnit_Framework_TestCase
 		$builder->toTimestamp(new \stdClass());
 	}
 
+	public function testToTimeString()
+	{
+		$builder = new MysqlParameterBuilder(
+			new PdoDriver($this->getPdo(), new MysqlMetaDataProcessor())
+		);
+		$this->assertEquals("'03:04:05'", $builder->toTime('03:04:05'));
+	}
+
+	public function testToTimeArrayOfString()
+	{
+		$builder = new MysqlParameterBuilder(
+			new PdoDriver($this->getPdo(), new MysqlMetaDataProcessor())
+		);
+		$this->assertEquals("'03:04:05'", $builder->toTime(array('03', '04', '05')));
+		$this->assertEquals("'03:04:05'", $builder->toTime(array('3', '4', '5')));
+	}
+
+	public function testToTimeArrayOfInt()
+	{
+		$builder = new MysqlParameterBuilder(
+			new PdoDriver($this->getPdo(), new MysqlMetaDataProcessor())
+		);
+		$this->assertEquals("'03:04:05'", $builder->toTime(array(3, 4, 5)));
+	}
+
+	public function testToTimeEmptyArray()
+	{
+		$builder = new MysqlParameterBuilder(
+			new PdoDriver($this->getPdo(), new MysqlMetaDataProcessor())
+		);
+		$this->assertEquals('NULL', $builder->toTime(array()));
+	}
+
+	public function testToTimeForDateTime()
+	{
+		$builder = new MysqlParameterBuilder(
+			new PdoDriver($this->getPdo(), new MysqlMetaDataProcessor())
+		);
+		$this->assertEquals("'03:04:05'", $builder->toTime(new \DateTime('2013-01-02 03:04:05')));
+	}
+
+	public function testToTimeForUnixTimestamp()
+	{
+		$builder = new MysqlParameterBuilder(
+			new PdoDriver($this->getPdo(), new MysqlMetaDataProcessor())
+		);
+		$this->assertEquals("'03:04:05'", $builder->toTime(mktime(3, 4, 5, 1, 2, 2013)));
+	}
+
+	public function testToTimeMin()
+	{
+		$builder = new MysqlParameterBuilder(
+			new PdoDriver($this->getPdo(), new MysqlMetaDataProcessor())
+		);
+		$this->assertEquals("'00:00:00'", $builder->toTime(QueryBuilder::MIN));
+	}
+
+	public function testToTimeMax()
+	{
+		$builder = new MysqlParameterBuilder(
+			new PdoDriver($this->getPdo(), new MysqlMetaDataProcessor())
+		);
+		$this->assertEquals("'23:59:59'", $builder->toTime(QueryBuilder::MAX));
+	}
+
+	public function testToTimeNow()
+	{
+		$builder = new MysqlParameterBuilder(
+			new PdoDriver($this->getPdo(), new MysqlMetaDataProcessor())
+		);
+		$this->assertEquals("TIME(NOW())", $builder->toTime(QueryBuilder::NOW));
+	}
+
+	public function testToTimeNull()
+	{
+		$builder = new MysqlParameterBuilder(
+			new PdoDriver($this->getPdo(), new MysqlMetaDataProcessor())
+		);
+		$this->assertEquals('NULL', $builder->toTime(null));
+	}
+
+	public function testToTimeEmptyString()
+	{
+		$builder = new MysqlParameterBuilder(
+			new PdoDriver($this->getPdo(), new MysqlMetaDataProcessor())
+		);
+		$this->assertEquals('NULL', $builder->toTime(''));
+	}
+
+	/**
+	 * @expectedException \InvalidArgumentException
+	 */
+	public function testToTimeRaiseExceptionWhenInvalidValue()
+	{
+		$builder = new MysqlParameterBuilder(
+			new PdoDriver($this->getPdo(), new MysqlMetaDataProcessor())
+		);
+		$builder->toTime(new \stdClass());
+	}
+
 	public function testToBool()
 	{
 		$builder = new MysqlParameterBuilder(
