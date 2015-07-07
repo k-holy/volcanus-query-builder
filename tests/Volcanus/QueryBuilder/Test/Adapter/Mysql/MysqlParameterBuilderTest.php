@@ -664,4 +664,63 @@ class MysqlParameterBuilderTest extends \PHPUnit_Framework_TestCase
 		$this->assertEquals('NULL', $builder->toBool(''));
 	}
 
+	public function testToGeometryFromString()
+	{
+		$builder = new MysqlParameterBuilder(
+			new PdoDriver($this->getPdo(), new MysqlMetaDataProcessor())
+		);
+		$this->assertEquals("GeomFromText('POINT(139.744858 35.675888)')", $builder->toGeometry('139.744858 35.675888'));
+	}
+
+	public function testToGeometryFromArrayOfString()
+	{
+		$builder = new MysqlParameterBuilder(
+			new PdoDriver($this->getPdo(), new MysqlMetaDataProcessor())
+		);
+		$this->assertEquals("GeomFromText('POINT(139.744858 35.675888)')", $builder->toGeometry(array('139.744858', '35.675888')));
+	}
+
+	public function testToGeometryFromArrayOfFloat()
+	{
+		$builder = new MysqlParameterBuilder(
+			new PdoDriver($this->getPdo(), new MysqlMetaDataProcessor())
+		);
+		$this->assertEquals("GeomFromText('POINT(139.744858 35.675888)')", $builder->toGeometry(array(139.744858, 35.675888)));
+	}
+
+	public function testToGeometryFromNull()
+	{
+		$builder = new MysqlParameterBuilder(
+			new PdoDriver($this->getPdo(), new MysqlMetaDataProcessor())
+		);
+		$this->assertEquals('NULL', $builder->toGeometry(null));
+	}
+
+	public function testToGeometryFromEmptyString()
+	{
+		$builder = new MysqlParameterBuilder(
+			new PdoDriver($this->getPdo(), new MysqlMetaDataProcessor())
+		);
+		$this->assertEquals('NULL', $builder->toGeometry(''));
+	}
+
+	public function testToGeometryFromEmptyArray()
+	{
+		$builder = new MysqlParameterBuilder(
+			new PdoDriver($this->getPdo(), new MysqlMetaDataProcessor())
+		);
+		$this->assertEquals('NULL', $builder->toGeometry(array()));
+	}
+
+	/**
+	 * @expectedException \InvalidArgumentException
+	 */
+	public function testToGeometryRaiseExceptionWhenInvalidValue()
+	{
+		$builder = new MysqlParameterBuilder(
+			new PdoDriver($this->getPdo(), new MysqlMetaDataProcessor())
+		);
+		$builder->toGeometry(new \stdClass());
+	}
+
 }

@@ -407,6 +407,41 @@ class MysqlParameterBuilder extends AbstractParameterBuilder implements Paramete
 	}
 
 	/**
+	 * 値をGEOMETRY型を表すSQLパラメータ値に変換します。
+	 *
+	 * @param mixed 値 string | array
+	 * @return string 変換結果
+	 */
+	public function toGeometry($value)
+	{
+		if (!isset($value)) {
+			return 'NULL';
+		}
+
+		// string
+		if (is_string($value)) {
+			if (strlen($value) === 0) {
+				return 'NULL';
+			}
+			$value = explode(' ', $value);
+		}
+
+		// array
+		if (is_array($value)) {
+			if (!isset($value[0]) || !isset($value[1])) {
+				return 'NULL';
+			}
+			return sprintf("GeomFromText('POINT(%s %s)')", $value[0], $value[1]);
+		}
+
+		throw new \InvalidArgumentException(
+			sprintf('The value is invalid toGeometry(), type:%s',
+				(is_object($value)) ? get_class($value) : gettype($value)
+			)
+		);
+	}
+
+	/**
 	 * 値をTINYINT型を表すSQLパラメータ値に変換します。
 	 *
 	 * @param mixed 値
