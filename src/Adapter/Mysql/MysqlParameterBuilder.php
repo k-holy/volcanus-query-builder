@@ -393,9 +393,9 @@ class MysqlParameterBuilder extends AbstractParameterBuilder implements Paramete
 			return sprintf("'%02d%s%02d%s%02d'",
 				(int)$value[0],
 				self::$timeDelimiter,
-				(isset($value[1]) && $value[1] !== '') ? (int)$value[1] : 1,
+				(isset($value[1]) && $value[1] !== '') ? (int)$value[1] : 0,
 				self::$timeDelimiter,
-				(isset($value[2]) && $value[2] !== '') ? (int)$value[2] : 1
+				(isset($value[2]) && $value[2] !== '') ? (int)$value[2] : 0
 			);
 		}
 

@@ -322,6 +322,14 @@ class MysqlParameterBuilderTest extends \PHPUnit_Framework_TestCase
 		$this->assertEquals("STR_TO_DATE('2013-01-02', '%Y-%m-%d')", $builder->ToDate(array(2013, 1, 2)));
 	}
 
+	public function testToDateOmittedArrayOfInt()
+	{
+		$builder = new MysqlParameterBuilder(
+			new PdoDriver($this->getPdo(), new MysqlMetaDataProcessor())
+		);
+		$this->assertEquals("STR_TO_DATE('2013-01-01', '%Y-%m-%d')", $builder->ToDate(array(2013)));
+	}
+
 	public function testToDateEmptyArray()
 	{
 		$builder = new MysqlParameterBuilder(
@@ -422,6 +430,14 @@ class MysqlParameterBuilderTest extends \PHPUnit_Framework_TestCase
 		$this->assertEquals("STR_TO_DATE('2013-01-02 03:04:05', '%Y-%m-%d %H:%i:%s')", $builder->toTimestamp(array(2013, 1, 2, 3, 4, 5)));
 	}
 
+	public function testToTimestampOmittedArrayOfInt()
+	{
+		$builder = new MysqlParameterBuilder(
+			new PdoDriver($this->getPdo(), new MysqlMetaDataProcessor())
+		);
+		$this->assertEquals("STR_TO_DATE('2013-01-01 00:00:00', '%Y-%m-%d %H:%i:%s')", $builder->toTimestamp(array(2013)));
+	}
+
 	public function testToTimestampEmptyArray()
 	{
 		$builder = new MysqlParameterBuilder(
@@ -520,6 +536,14 @@ class MysqlParameterBuilderTest extends \PHPUnit_Framework_TestCase
 			new PdoDriver($this->getPdo(), new MysqlMetaDataProcessor())
 		);
 		$this->assertEquals("'03:04:05'", $builder->toTime(array(3, 4, 5)));
+	}
+
+	public function testToTimeOmittedArrayOfInt()
+	{
+		$builder = new MysqlParameterBuilder(
+			new PdoDriver($this->getPdo(), new MysqlMetaDataProcessor())
+		);
+		$this->assertEquals("'03:00:00'", $builder->toTime(array(3)));
 	}
 
 	public function testToTimeEmptyArray()
