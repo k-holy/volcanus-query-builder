@@ -343,6 +343,70 @@ class MysqlParameterBuilder extends AbstractParameterBuilder implements Paramete
 	}
 
 	/**
+	 * 値を時刻を表すSQLパラメータ値に変換します。
+	 *
+	 * @param mixed 値 int | DateTime | string | array
+	 * @return string 変換結果
+	 */
+	public function toTime($value)
+	{
+		if (!isset($value)) {
+			return 'NULL';
+		}
+
+		// Unix Timestamp
+		if (is_int($value)) {
+			$value = new \DateTime(sprintf('@%d', $value));
+			$value->setTimezone(new \DateTimeZone(date_default_timezone_get()));
+		}
+
+		// DateTime
+		if ($value instanceof \DateTime) {
+			return sprintf("'%s'", $value->format(sprintf('H%si%ss',
+				self::$timeDelimiter,
+				self::$timeDelimiter
+			)));
+		}
+
+		// String of a time
+		if (is_string($value)) {
+			if (strlen($value) === 0) {
+				return 'NULL';
+			}
+			if ($value === QueryBuilder::NOW) {
+				return 'TIME(NOW())';
+			}
+			if ($value === QueryBuilder::MIN) {
+				return "'00:00:00'";
+			}
+			if ($value === QueryBuilder::MAX) {
+				return "'23:59:59'";
+			}
+			return sprintf("'%s'", $value);
+		}
+
+		// array
+		if (is_array($value)) {
+			if (!isset($value[0])) {
+				return 'NULL';
+			}
+			return sprintf("'%02d%s%02d%s%02d'",
+				(int)$value[0],
+				self::$timeDelimiter,
+				(isset($value[1]) && $value[1] !== '') ? (int)$value[1] : 1,
+				self::$timeDelimiter,
+				(isset($value[2]) && $value[2] !== '') ? (int)$value[2] : 1
+			);
+		}
+
+		throw new \InvalidArgumentException(
+			sprintf('The value is invalid toTime(), type:%s',
+				(is_object($value)) ? get_class($value) : gettype($value)
+			)
+		);
+	}
+
+	/**
 	 * 値をTINYINT型を表すSQLパラメータ値に変換します。
 	 *
 	 * @param mixed 値

@@ -40,6 +40,7 @@ class MysqlQueryBuilder extends AbstractQueryBuilder implements QueryBuilderInte
 		'float'     => array('float', 'double', 'real'),
 		'bool'      => array('bool', 'boolean'),
 		'date'      => array('date'),
+		'time'      => array('time'),
 		'timestamp' => array('timestamp', 'datetime'),
 	);
 
