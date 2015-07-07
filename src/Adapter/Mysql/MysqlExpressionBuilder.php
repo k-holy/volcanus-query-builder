@@ -78,4 +78,15 @@ class MysqlExpressionBuilder implements ExpressionBuilderInterface
 		return sprintf("DATE_FORMAT(%s, '%s')", $name, $format);
 	}
 
+	/**
+	 * GEOMETRY型の項目をテキストとして取得するSQL句を生成します。
+	 *
+	 * @param string 項目名
+	 * @return string 値を取得するSQL句
+	 */
+	public function asGeometry($name)
+	{
+		return sprintf('ASTEXT(%s)', $name);
+	}
+
 }

@@ -42,6 +42,7 @@ class MysqlQueryBuilder extends AbstractQueryBuilder implements QueryBuilderInte
 		'date'      => array('date'),
 		'time'      => array('time'),
 		'timestamp' => array('timestamp', 'datetime'),
+		'geometry'  => array('geometry'),
 	);
 
 	/**

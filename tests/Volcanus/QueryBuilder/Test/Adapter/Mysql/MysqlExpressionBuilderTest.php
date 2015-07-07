@@ -36,4 +36,10 @@ class MysqlExpressionBuilderTest extends \PHPUnit_Framework_TestCase
 		$this->assertEquals("DATE_FORMAT(name, '%Y-%m-%d %H:%i:%s')", $builder->asTimestamp('name'));
 	}
 
+	public function testAsGeometry()
+	{
+		$builder = new MysqlExpressionBuilder();
+		$this->assertEquals("ASTEXT(name)", $builder->asGeometry('name'));
+	}
+
 }
