@@ -862,6 +862,25 @@ SQL
 		$this->assertEquals('RAND()', $expressions[1]);
 	}
 
+	public function testOrderByExpressionsAsDate()
+	{
+		$facade = new Facade($this->getDriver(), $this->getBuilder());
+		$orders = array('updated_at DESC', 'user_id DESC');
+		$expressions = $facade->orderByExpressions('users', null, $orders);
+		$this->assertEquals("strftime('%Y-%m-%d %H:%i:%s', users.updated_at) DESC"  , $expressions[0]);
+		$this->assertEquals('users.user_id DESC', $expressions[1]);
+	}
+
+	public function testOrderByExpressionsAsDateEnableCamelize()
+	{
+		$facade = new Facade($this->getDriver(), $this->getBuilder());
+		$facade->enableCamelize(true);
+		$orders = array('updatedAt DESC', 'userId DESC');
+		$expressions = $facade->orderByExpressions('users', null, $orders);
+		$this->assertEquals("strftime('%Y-%m-%d %H:%i:%s', users.updated_at) DESC"  , $expressions[0]);
+		$this->assertEquals('users.user_id DESC', $expressions[1]);
+	}
+
 	public function testEscapeLikePattern()
 	{
 		$facade = new Facade($this->getDriver(), $this->getBuilder());

@@ -353,6 +353,7 @@ SQL;
 	 */
 	public function orderByExpressions($tableName = null, $tableAlias = null, $orders = array())
 	{
+		$metaColumns = ($tableName !== null) ? $this->driver->getMetaColumns($tableName) : array();
 		$expressions = array();
 		foreach ($orders as $order) {
 			if (strlen(trim($order)) === 0) {
@@ -366,8 +367,12 @@ SQL;
 					$columnName = $this->underscore($columnName);
 				}
 				$desc = (isset($matches[2])) ? $matches[2] : '';
-				$sortKey = (isset($tableAlias)) ? "{$tableAlias}.{$columnName}" : "{$tableName}.{$columnName}";
-				$expressions[] = (strcmp($desc, '') != 0) ? "{$sortKey} {$desc}" : $sortKey;
+				$sortKey = (isset($tableAlias)) ? $tableAlias . '.' . $columnName : $tableName . '.' . $columnName;
+				if (array_key_exists($columnName, $metaColumns)) {
+					$column = $metaColumns[$columnName];
+					$sortKey = $this->expression($sortKey, $column->type, false);
+				}
+				$expressions[] = (strcmp($desc, '') != 0) ? $sortKey . ' ' . $desc : $sortKey;
 			} else {
 				$expressions[] = $order;
 			}

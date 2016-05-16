@@ -42,7 +42,7 @@ class SqliteExpressionBuilder implements ExpressionBuilderInterface
 	 */
 	public function resultColumn($expr, $alias = null)
 	{
-		return (isset($alias)) ? $expr . ' AS "' . $alias . '"' : $expr;
+		return (is_string($alias) && strlen($alias) >= 1) ? $expr . ' AS "' . $alias . '"' : $expr;
 	}
 
 	/**
