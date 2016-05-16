@@ -42,14 +42,13 @@ class MysqlExpressionBuilder implements ExpressionBuilderInterface
 	 */
 	public function resultColumn($expr, $alias = null)
 	{
-		return (isset($alias)) ? $expr . ' AS `' . $alias .'`' : $expr;
+		return (is_string($alias) && strlen($alias) >= 1) ? $expr . ' AS `' . $alias . '`' : $expr;
 	}
 
 	/**
 	 * 日付型の項目を書式化して取得するSQL句を生成します。
 	 *
 	 * @param string 項目名
-	 * @param string 書式
 	 * @return string 値を取得するSQL句
 	 */
 	public function asDate($name)
@@ -64,7 +63,6 @@ class MysqlExpressionBuilder implements ExpressionBuilderInterface
 	 * 日付時刻型の項目を書式化して取得するSQL句を生成します。
 	 *
 	 * @param string 項目名
-	 * @param string 書式
 	 * @return string 値を取得するSQL句
 	 */
 	public function asTimestamp($name)
