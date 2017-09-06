@@ -13,7 +13,7 @@ namespace Volcanus\QueryBuilder\Test;
  *
  * @author k.holy74@gmail.com
  */
-class AbstractParameterBuilderTest extends \PHPUnit_Framework_TestCase
+class AbstractParameterBuilderTest extends \PHPUnit\Framework\TestCase
 {
 
 	public function testToText()

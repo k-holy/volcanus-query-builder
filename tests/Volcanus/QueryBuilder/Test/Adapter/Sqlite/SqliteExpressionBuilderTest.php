@@ -15,7 +15,7 @@ use Volcanus\QueryBuilder\Adapter\Sqlite\SqliteExpressionBuilder;
  *
  * @author k.holy74@gmail.com
  */
-class SqliteExpressionBuilderTest extends \PHPUnit_Framework_TestCase
+class SqliteExpressionBuilderTest extends \PHPUnit\Framework\TestCase
 {
 
 	public function testResultColumn()

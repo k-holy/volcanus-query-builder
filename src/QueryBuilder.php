@@ -29,8 +29,8 @@ class QueryBuilder
 	/**
 	 * ファサードクラスを生成します。
 	 *
-	 * @param Volcanus\Database\Driver\DriverInterface
-	 * @return Volcanus\QueryBuilder\Facade
+	 * @param \Volcanus\Database\Driver\DriverInterface
+	 * @return \Volcanus\QueryBuilder\Facade
 	 */
 	public static function facade(DriverInterface $driver)
 	{
@@ -40,8 +40,8 @@ class QueryBuilder
 	/**
 	 * 指定されたドライバに合ったクエリビルダクラスを生成します。
 	 *
-	 * @param Volcanus\Database\Driver\DriverInterface
-	 * @return Volcanus\QueryBuilder\QueryBuilderInterface
+	 * @param \Volcanus\Database\Driver\DriverInterface
+	 * @return \Volcanus\QueryBuilder\QueryBuilderInterface
 	 */
 	public static function factory(DriverInterface $driver)
 	{

@@ -16,7 +16,7 @@ use Volcanus\Database\Driver\Pdo\PdoDriver;
  *
  * @author k.holy74@gmail.com
  */
-class QueryBuilderTest extends \PHPUnit_Framework_TestCase
+class QueryBuilderTest extends \PHPUnit\Framework\TestCase
 {
 
 	public function testCreateAdapterByFactory()

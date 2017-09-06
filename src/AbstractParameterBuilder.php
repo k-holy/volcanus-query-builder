@@ -8,18 +8,20 @@
 
 namespace Volcanus\QueryBuilder;
 
+use Volcanus\QueryBuilder\ParameterBuilderInterface;
+
 /**
  * パラメータビルダ抽象クラス
  *
  * @author k_horii@rikcorp.jp
  */
-abstract class AbstractParameterBuilder
+abstract class AbstractParameterBuilder implements ParameterBuilderInterface
 {
 
 	/**
 	 * 値を1ビットの数値を表すSQLパラメータ値に変換します。
 	 *
-	 * @param string 値
+	 * @param int|float|string $value 値
 	 * @return string 変換結果
 	 */
 	public function toInt1($value)
@@ -48,7 +50,7 @@ abstract class AbstractParameterBuilder
 	/**
 	 * 値を2ビットの数値を表すSQLパラメータ値に変換します。
 	 *
-	 * @param string 値
+	 * @param int|float|string $value 値
 	 * @return string 変換結果
 	 */
 	public function toInt2($value)
@@ -77,7 +79,7 @@ abstract class AbstractParameterBuilder
 	/**
 	 * 値を3ビットの数値を表すSQLパラメータ値に変換します。
 	 *
-	 * @param string 値
+	 * @param int|float|string $value 値
 	 * @return string 変換結果
 	 */
 	public function toInt3($value)
@@ -106,7 +108,7 @@ abstract class AbstractParameterBuilder
 	/**
 	 * 値を4ビットの数値を表すSQLパラメータ値に変換します。
 	 *
-	 * @param string 値
+	 * @param int|float|string $value 値
 	 * @return string 変換結果
 	 */
 	public function toInt4($value)
@@ -135,7 +137,7 @@ abstract class AbstractParameterBuilder
 	/**
 	 * 値を8ビットの数値を表すSQLパラメータ値に変換します。
 	 *
-	 * @param string 値
+	 * @param int|float|string $value 値
 	 * @return string 変換結果
 	 */
 	public function toInt8($value)

@@ -15,7 +15,7 @@ use Volcanus\QueryBuilder\Adapter\Mysql\MysqlExpressionBuilder;
  *
  * @author k.holy74@gmail.com
  */
-class MysqlExpressionBuilderTest extends \PHPUnit_Framework_TestCase
+class MysqlExpressionBuilderTest extends \PHPUnit\Framework\TestCase
 {
 
 	public function testResultColumn()

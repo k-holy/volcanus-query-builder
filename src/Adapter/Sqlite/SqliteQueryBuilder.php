@@ -22,12 +22,12 @@ class SqliteQueryBuilder extends AbstractQueryBuilder implements QueryBuilderInt
 {
 
 	/**
-	 * @var Volcanus\QueryBuilder\Adapter\Sqlite\SqliteExpressionBuilder
+	 * @var \Volcanus\QueryBuilder\Adapter\Sqlite\SqliteExpressionBuilder
 	 */
 	protected $expressionBuilder;
 
 	/**
-	 * @var Volcanus\QueryBuilder\Adapter\Sqlite\SqliteParameterBuilder
+	 * @var \Volcanus\QueryBuilder\Adapter\Sqlite\SqliteParameterBuilder
 	 */
 	protected $parameterBuilder;
 
@@ -46,8 +46,8 @@ class SqliteQueryBuilder extends AbstractQueryBuilder implements QueryBuilderInt
 	/**
 	 * コンストラクタ
 	 *
-	 * @param Volcanus\QueryBuilder\Adapter\Sqlite\SqliteExpressionBuilder
-	 * @param Volcanus\QueryBuilder\Adapter\Sqlite\SqliteParameterBuilder
+	 * @param \Volcanus\QueryBuilder\Adapter\Sqlite\SqliteExpressionBuilder $expressionBuilder
+	 * @param \Volcanus\QueryBuilder\Adapter\Sqlite\SqliteParameterBuilder $parameterBuilder
 	 */
 	public function __construct(SqliteExpressionBuilder $expressionBuilder, SqliteParameterBuilder $parameterBuilder)
 	{
@@ -58,9 +58,9 @@ class SqliteQueryBuilder extends AbstractQueryBuilder implements QueryBuilderInt
 	/**
 	 * SELECT文にLIMIT値およびOFFSET値を付与して返します。
 	 *
-	 * @param string SELECT文
-	 * @param int 最大取得件数
-	 * @param int 取得開始行index
+	 * @param string $sql SELECT文
+	 * @param int $limit 最大取得件数
+	 * @param int $offset 取得開始行index
 	 * @return string SQL
 	 */
 	public function limitOffset($sql, $limit = null, $offset = null)
@@ -81,7 +81,7 @@ class SqliteQueryBuilder extends AbstractQueryBuilder implements QueryBuilderInt
 	/**
 	 * SELECT文を元に件数を返すクエリを生成して返します。
 	 *
-	 * @param string SELECT文
+	 * @param string $sql SELECT文
 	 * @return string SQL
 	 */
 	public function count($sql)

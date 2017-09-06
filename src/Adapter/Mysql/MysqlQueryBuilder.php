@@ -22,12 +22,12 @@ class MysqlQueryBuilder extends AbstractQueryBuilder implements QueryBuilderInte
 {
 
 	/**
-	 * @var Volcanus\QueryBuilder\Adapter\Mysql\MysqlExpressionBuilder
+	 * @var \Volcanus\QueryBuilder\Adapter\Mysql\MysqlExpressionBuilder
 	 */
 	protected $expressionBuilder;
 
 	/**
-	 * @var Volcanus\QueryBuilder\Adapter\Mysql\MysqlParameterBuilder
+	 * @var \Volcanus\QueryBuilder\Adapter\Mysql\MysqlParameterBuilder
 	 */
 	protected $parameterBuilder;
 
@@ -48,8 +48,8 @@ class MysqlQueryBuilder extends AbstractQueryBuilder implements QueryBuilderInte
 	/**
 	 * コンストラクタ
 	 *
-	 * @param Volcanus\QueryBuilder\Adapter\Mysql\MysqlExpressionBuilder
-	 * @param Volcanus\QueryBuilder\Adapter\Mysql\MysqlParameterBuilder
+	 * @param \Volcanus\QueryBuilder\Adapter\Mysql\MysqlExpressionBuilder $expressionBuilder
+	 * @param \Volcanus\QueryBuilder\Adapter\Mysql\MysqlParameterBuilder $parameterBuilder
 	 */
 	public function __construct(MysqlExpressionBuilder $expressionBuilder, MysqlParameterBuilder $parameterBuilder)
 	{
@@ -60,9 +60,9 @@ class MysqlQueryBuilder extends AbstractQueryBuilder implements QueryBuilderInte
 	/**
 	 * SELECT文にLIMIT値およびOFFSET値を付与して返します。
 	 *
-	 * @param string SELECT文
-	 * @param int 最大取得件数
-	 * @param int 取得開始行index
+	 * @param string $sql SELECT文
+	 * @param int $limit 最大取得件数
+	 * @param int $offset 取得開始行index
 	 * @return string SQL
 	 */
 	public function limitOffset($sql, $limit = null, $offset = null)
@@ -77,7 +77,7 @@ class MysqlQueryBuilder extends AbstractQueryBuilder implements QueryBuilderInte
 	/**
 	 * SELECT文を元に件数を返すクエリを生成して返します。
 	 *
-	 * @param string SELECT文
+	 * @param string $sql SELECT文
 	 * @return string SQL
 	 */
 	public function count($sql)

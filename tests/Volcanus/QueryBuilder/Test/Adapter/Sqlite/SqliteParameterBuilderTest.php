@@ -19,7 +19,7 @@ use Volcanus\Database\MetaData\SqliteMetaDataProcessor;
  *
  * @author k.holy74@gmail.com
  */
-class SqliteParameterBuilderTest extends \PHPUnit_Framework_TestCase
+class SqliteParameterBuilderTest extends \PHPUnit\Framework\TestCase
 {
 
 	private static $pdo;

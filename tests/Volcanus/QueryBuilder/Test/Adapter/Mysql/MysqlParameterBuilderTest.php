@@ -19,7 +19,7 @@ use Volcanus\Database\MetaData\MysqlMetaDataProcessor;
  *
  * @author k.holy74@gmail.com
  */
-class MysqlParameterBuilderTest extends \PHPUnit_Framework_TestCase
+class MysqlParameterBuilderTest extends \PHPUnit\Framework\TestCase
 {
 
 	private static $pdo;

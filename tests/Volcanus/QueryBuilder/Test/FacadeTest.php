@@ -23,9 +23,10 @@ use Volcanus\Database\MetaData\SqliteMetaDataProcessor;
  *
  * @author k.holy74@gmail.com
  */
-class FacadeTest extends \PHPUnit_Framework_TestCase
+class FacadeTest extends \PHPUnit\Framework\TestCase
 {
 
+    /** @var \PDO */
 	private static $pdo;
 
 	private function getPdo()
