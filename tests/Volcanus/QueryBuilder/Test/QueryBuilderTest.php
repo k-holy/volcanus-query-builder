@@ -19,26 +19,26 @@ use Volcanus\Database\Driver\Pdo\PdoDriver;
 class QueryBuilderTest extends \PHPUnit\Framework\TestCase
 {
 
-	public function testCreateAdapterByFactory()
-	{
-		$this->assertInstanceOf('Volcanus\QueryBuilder\Adapter\\Sqlite\\SqliteQueryBuilder',
-			QueryBuilder::factory(
-				new PdoDriver(
-					new \PDO('sqlite::memory:')
-				)
-			)
-		);
-	}
+    public function testCreateAdapterByFactory()
+    {
+        $this->assertInstanceOf('Volcanus\QueryBuilder\Adapter\\Sqlite\\SqliteQueryBuilder',
+            QueryBuilder::factory(
+                new PdoDriver(
+                    new \PDO('sqlite::memory:')
+                )
+            )
+        );
+    }
 
-	public function testCreateFacade()
-	{
-		$this->assertInstanceOf('Volcanus\QueryBuilder\Facade',
-			QueryBuilder::facade(
-				new PdoDriver(
-					new \PDO('sqlite::memory:')
-				)
-			)
-		);
-	}
+    public function testCreateFacade()
+    {
+        $this->assertInstanceOf('Volcanus\QueryBuilder\Facade',
+            QueryBuilder::facade(
+                new PdoDriver(
+                    new \PDO('sqlite::memory:')
+                )
+            )
+        );
+    }
 
 }

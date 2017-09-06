@@ -18,28 +18,28 @@ use Volcanus\QueryBuilder\Adapter\Mysql\MysqlExpressionBuilder;
 class MysqlExpressionBuilderTest extends \PHPUnit\Framework\TestCase
 {
 
-	public function testResultColumn()
-	{
-		$builder = new MysqlExpressionBuilder();
-		$this->assertEquals('name AS `alias`', $builder->resultColumn('name', 'alias'));
-	}
+    public function testResultColumn()
+    {
+        $builder = new MysqlExpressionBuilder();
+        $this->assertEquals('name AS `alias`', $builder->resultColumn('name', 'alias'));
+    }
 
-	public function testAsDate()
-	{
-		$builder = new MysqlExpressionBuilder();
-		$this->assertEquals("DATE_FORMAT(name, '%Y-%m-%d')", $builder->asDate('name'));
-	}
+    public function testAsDate()
+    {
+        $builder = new MysqlExpressionBuilder();
+        $this->assertEquals("DATE_FORMAT(name, '%Y-%m-%d')", $builder->asDate('name'));
+    }
 
-	public function testAsTimestamp()
-	{
-		$builder = new MysqlExpressionBuilder();
-		$this->assertEquals("DATE_FORMAT(name, '%Y-%m-%d %H:%i:%s')", $builder->asTimestamp('name'));
-	}
+    public function testAsTimestamp()
+    {
+        $builder = new MysqlExpressionBuilder();
+        $this->assertEquals("DATE_FORMAT(name, '%Y-%m-%d %H:%i:%s')", $builder->asTimestamp('name'));
+    }
 
-	public function testAsGeometry()
-	{
-		$builder = new MysqlExpressionBuilder();
-		$this->assertEquals("ASTEXT(name)", $builder->asGeometry('name'));
-	}
+    public function testAsGeometry()
+    {
+        $builder = new MysqlExpressionBuilder();
+        $this->assertEquals("ASTEXT(name)", $builder->asGeometry('name'));
+    }
 
 }
