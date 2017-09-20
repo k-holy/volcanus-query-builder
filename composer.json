@@ -16,6 +16,6 @@
     },
     "require": {
         "php": ">=5.3.3",
-        "volcanus/database": "dev-master"
+        "volcanus/database": "0.4.2"
     }
 }
