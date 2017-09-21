@@ -20,17 +20,17 @@ abstract class AbstractQueryBuilder
 {
 
     /**
-     * @var Volcanus\QueryBuilder\ExpressionBuilderInterface
+     * @var \Volcanus\QueryBuilder\ExpressionBuilderInterface
      */
     protected $expressionBuilder;
 
     /**
-     * @var Volcanus\QueryBuilder\ParameterBuilderInterface
+     * @var \Volcanus\QueryBuilder\ParameterBuilderInterface
      */
     protected $parameterBuilder;
 
     /**
-     * @param Volcanus\QueryBuilder\ExpressionBuilderInterface
+     * @param \Volcanus\QueryBuilder\ExpressionBuilderInterface
      */
     protected function setExpressionBuilder(ExpressionBuilderInterface $expressionBuilder)
     {
@@ -38,7 +38,7 @@ abstract class AbstractQueryBuilder
     }
 
     /**
-     * @param Volcanus\QueryBuilder\ExpressionBuilderInterface
+     * @param \Volcanus\QueryBuilder\ParameterBuilderInterface
      */
     protected function setParameterBuilder(ParameterBuilderInterface $parameterBuilder)
     {
@@ -65,8 +65,8 @@ abstract class AbstractQueryBuilder
     /**
      * 値を指定した型に応じたSQLパラメータ値に変換します。
      *
-     * @param string データ
-     * @param string 型名 ($typesフィールド参照)
+     * @param string $value データ
+     * @param string $type 型名 ($typesフィールド参照)
      * @return string 変換結果
      */
     public function parameter($value, $type)
@@ -89,9 +89,9 @@ abstract class AbstractQueryBuilder
     /**
      * データ型に合わせて項目を別名で取得するSQL句を生成します。
      *
-     * @param string 項目名
-     * @param string データ型
-     * @param string 別名
+     * @param string $expr 項目名
+     * @param string $type データ型
+     * @param string $alias 別名
      * @return string SQL句
      */
     public function expression($expr, $type = null, $alias = null)
@@ -117,8 +117,8 @@ abstract class AbstractQueryBuilder
     /**
      * Like演算子のパターンとして使用する文字列をエスケープして返します。
      *
-     * @param string 抽出対象項目名
-     * @param string エスケープに使用する文字
+     * @param string $pattern 抽出対象項目名
+     * @param string $escapeChar エスケープに使用する文字
      * @return string エスケープされた文字列
      */
     public function escapeLikePattern($pattern, $escapeChar = '\\')

@@ -19,7 +19,7 @@ interface ParameterBuilderInterface
     /**
      * 値を可変長/固定長文字列を表すSQLパラメータ値に変換します。
      *
-     * @param mixed 値
+     * @param mixed $value 値
      * @return string 変換結果
      */
     public function toText($value);
@@ -27,8 +27,8 @@ interface ParameterBuilderInterface
     /**
      * 値を数値を表すSQLパラメータ値に変換します。
      *
-     * @param mixed 値
-     * @param string 型名 ($typesフィールド参照)
+     * @param mixed $value 値
+     * @param string $type 型名 ($typesフィールド参照)
      * @return string 変換結果
      */
     public function toInt($value, $type = null);
@@ -36,8 +36,8 @@ interface ParameterBuilderInterface
     /**
      * 値を浮動小数点数を表すSQLパラメータ値に変換します。
      *
-     * @param mixed 値
-     * @param string 型名 ($typesフィールド参照)
+     * @param mixed $value 値
+     * @param string $type 型名 ($typesフィールド参照)
      * @return string 変換結果
      */
     public function toFloat($value, $type = null);
@@ -45,7 +45,7 @@ interface ParameterBuilderInterface
     /**
      * 値を真偽値を表すSQLパラメータ値に変換します。
      *
-     * @param mixed 値
+     * @param mixed $value 値
      * @return string 変換結果
      */
     public function toBool($value);
@@ -53,7 +53,7 @@ interface ParameterBuilderInterface
     /**
      * 値を日付を表すSQLパラメータ値に変換します。
      *
-     * @param mixed 値
+     * @param mixed $value 値
      * @return string 変換結果
      */
     public function toDate($value);
@@ -61,7 +61,7 @@ interface ParameterBuilderInterface
     /**
      * 値を日時を表すSQLパラメータ値に変換します。
      *
-     * @param mixed 値
+     * @param mixed $value 値
      * @return string 変換結果
      */
     public function toTimestamp($value);

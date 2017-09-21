@@ -20,12 +20,12 @@ use Volcanus\Database\Driver\DriverInterface;
 class Facade
 {
     /**
-     * @var Volcanus\Database\Driver\DriverInterface
+     * @var \Volcanus\Database\Driver\DriverInterface
      */
     private $driver;
 
     /**
-     * @var Volcanus\QueryBuilder\QueryBuilderInterface
+     * @var \Volcanus\QueryBuilder\QueryBuilderInterface
      */
     private $builder;
 
@@ -34,6 +34,12 @@ class Facade
      */
     private $enableCamelize = false;
 
+    /**
+     * Facade constructor.
+     *
+     * @param \Volcanus\Database\Driver\DriverInterface $driver
+     * @param \Volcanus\QueryBuilder\QueryBuilderInterface $builder
+     */
     public function __construct(DriverInterface $driver, QueryBuilderInterface $builder)
     {
         $this->driver = $driver;
@@ -43,7 +49,7 @@ class Facade
     /**
      * 取得するカラム名をキャメルケースに変換するかどうかを設定します。
      *
-     * @param boolean 取得するカラム名をキャメルケースに変換するかどうか
+     * @param boolean $enabled 取得するカラム名をキャメルケースに変換するかどうか
      */
     public function enableCamelize($enabled = true)
     {
@@ -53,9 +59,9 @@ class Facade
     /**
      * データ型に合わせて項目を別名で取得するSQL句を生成します。
      *
-     * @param string 項目名
-     * @param string データ型
-     * @param string 別名
+     * @param string $expr 項目名
+     * @param string $type データ型
+     * @param string $alias 別名
      * @return string SQL句
      */
     public function expression($expr, $type = null, $alias = null)
@@ -66,10 +72,10 @@ class Facade
     /**
      * カラム定義に従い、SELECT句の配列を生成します。
      *
-     * @param string テーブル名
-     * @param string テーブル別名
-     * @param array 除外列名のリスト
-     * @param array 別名取得設定 (キー=列名、値=別名)
+     * @param string $tableName テーブル名
+     * @param string $tableAlias テーブル別名
+     * @param array $excludeKeys 除外列名のリスト
+     * @param array $columnAliases 別名取得設定 (キー=列名、値=別名)
      * @return array SQL SELECT句となる列指定の配列
      */
     public function expressions($tableName, $tableAlias = null, $excludeKeys = array(), $columnAliases = array())
@@ -93,8 +99,8 @@ class Facade
     /**
      * 値を指定した型に応じたSQLパラメータ値に変換します。
      *
-     * @param string データ
-     * @param string 型名 ($typesフィールド参照)
+     * @param string $value データ
+     * @param string $type 型名 ($typesフィールド参照)
      * @return string 変換結果
      */
     public function parameter($value, $type)
@@ -107,8 +113,8 @@ class Facade
      * カラム定義に存在しない列名の値は無視します。
      * 列名の先頭が PREFIX_NO_CONVERT の場合は値の変換を回避します。
      *
-     * @param string テーブル名
-     * @param array 登録内容 array(列名 => 列値, 列名 => 列値...)
+     * @param string $tableName テーブル名
+     * @param array $columns 登録内容 array(列名 => 列値, 列名 => 列値...)
      * @return array 変換済みの登録内容の配列
      */
     public function parameters($tableName, $columns)
@@ -135,8 +141,8 @@ class Facade
     /**
      * INSERT文を組み立てて返します。
      *
-     * @param string テーブル名
-     * @param array 登録内容 array(列名 => 列値, 列名 => 列値...)
+     * @param string $tableName テーブル名
+     * @param array $columns 登録内容 array(列名 => 列値, 列名 => 列値...)
      * @return string SQL
      */
     public function insert($tableName, $columns)
@@ -156,9 +162,9 @@ SQL;
     /**
      * UPDATE文を組み立てて返します。
      *
-     * @param string テーブル名
-     * @param array 更新内容 array(列名 => 列値, 列名 => 列値...)
-     * @param string WHERE句
+     * @param string $tableName テーブル名
+     * @param array $columns 更新内容 array(列名 => 列値, 列名 => 列値...)
+     * @param string $where WHERE句
      * @return string SQL
      */
     public function update($tableName, $columns, $where = null)
@@ -183,8 +189,8 @@ SQL;
     /**
      * DELETE文を組み立てて返します。
      *
-     * @param string テーブル名
-     * @param string WHERE句
+     * @param string $tableName テーブル名
+     * @param string $where WHERE句
      * @return string SQL
      */
     public function delete($tableName, $where = null)
@@ -201,11 +207,10 @@ SQL;
     /**
      * SELECT節を組み立てて返します。
      *
-     * @param string テーブル名
-     * @param string テーブル別名
-     * @param string WHERE句
-     * @param array 除外列名のリスト
-     * @param array 別名取得設定 (キー=列名、値=別名)
+     * @param string $tableName テーブル名
+     * @param string $tableAlias テーブル別名
+     * @param array $excludeKeys 除外列名のリスト
+     * @param array $columnAliases 別名取得設定 (キー=列名、値=別名)
      * @return string SQL
      */
     public function selectSyntax($tableName, $tableAlias = null, $excludeKeys = array(), $columnAliases = array())
@@ -217,8 +222,8 @@ SQL;
     /**
      * FROM節を組み立てて返します。
      *
-     * @param string テーブル名
-     * @param string テーブル別名
+     * @param string $tableName テーブル名
+     * @param string $tableAlias テーブル別名
      * @return string SQL FROM節
      */
     public function fromSyntax($tableName, $tableAlias = null)
@@ -229,11 +234,11 @@ SQL;
     /**
      * SELECT文を組み立てて返します。
      *
-     * @param string テーブル名
-     * @param string テーブル別名
-     * @param string WHERE句
-     * @param array 除外列名のリスト
-     * @param array 別名取得設定 (キー=列名、値=別名)
+     * @param string $tableName テーブル名
+     * @param string $tableAlias テーブル別名
+     * @param string $where WHERE句
+     * @param array $excludeKeys 除外列名のリスト
+     * @param array $columnAliases 別名取得設定 (キー=列名、値=別名)
      * @return string SQL
      */
     public function select($tableName, $tableAlias = null, $where = null, $excludeKeys = array(), $columnAliases = array())
@@ -250,7 +255,7 @@ SQL;
     /**
      * SELECT文を元に件数を返すクエリを生成して返します。
      *
-     * @param string SELECT文
+     * @param string $sql SELECT文
      * @return string SQL
      */
     public function count($sql)
@@ -261,9 +266,9 @@ SQL;
     /**
      * SELECT文にLIMIT値およびOFFSET値を付与して返します。
      *
-     * @param string SELECT文
-     * @param int 最大取得件数
-     * @param int 取得開始行index
+     * @param string $sql SELECT文
+     * @param int $limit 最大取得件数
+     * @param int $offset 取得開始行index
      * @return string SQL
      */
     public function limitOffset($sql, $limit = null, $offset = null)
@@ -274,8 +279,9 @@ SQL;
     /**
      * 抽出条件およびスキーマ情報に合わせてSQLのWHERE句を作成します。
      *
-     * @param string テーブル名
-     * @param array 抽出条件を格納した配列(キー=列名、値=列値)
+     * @param string $tableName テーブル名
+     * @param string $tableAlias テーブル別名
+     * @param array $columns 抽出条件を格納した配列(キー=列名、値=列値)
      * @return array SQL WHERE句となる抽出条件の配列
      */
     public function whereExpressions($tableName, $tableAlias = null, $columns = array())
@@ -347,8 +353,9 @@ SQL;
     /**
      * 抽出条件およびスキーマ情報に合わせてSQLのORDER BY句を作成します。
      *
-     * @param string テーブル名
-     * @param array 整列順を格納した配列(キー=順序、値=列名 + 昇順/降順)
+     * @param string $tableName テーブル名
+     * @param string $tableAlias テーブル別名
+     * @param array $orders 整列順を格納した配列(キー=順序、値=列名 + 昇順/降順)
      * @return array SQL ORDER BY句となる列名の配列
      */
     public function orderByExpressions($tableName = null, $tableAlias = null, $orders = array())
@@ -358,8 +365,6 @@ SQL;
             if (strlen(trim($order)) === 0) {
                 continue;
             }
-            $sortKey = $order;
-            $desc = '';
             if (isset($tableName) && preg_match('/\A\s*([a-zA-Z0-9_]+)(?:\s+(desc|asc))?\s*\z/i', $order, $matches)) {
                 $columnName = $matches[1];
                 if ($this->enableCamelize) {
@@ -378,10 +383,10 @@ SQL;
     /**
      * 抽出条件およびスキーマ情報に合わせてSQLのGROUP BY句を作成します。
      *
-     * @param string テーブル名
-     * @param string テーブル別名
-     * @param array 除外列を格納した配列(値=列名)
-     * @param array 追加列を格納した配列(値=列名)
+     * @param string $tableName テーブル名
+     * @param string $tableAlias テーブル別名
+     * @param array $excludeKeys 除外列を格納した配列(値=列名)
+     * @param array $appendKeys 追加列を格納した配列(値=列名)
      * @return array SQL GROUP BY句となる列名の配列
      */
     public function groupByExpressions($tableName, $tableAlias = null, $excludeKeys = array(), $appendKeys = array())
@@ -401,9 +406,9 @@ SQL;
     /**
      * WHERE節を組み立てて返します。
      *
-     * @param string テーブル名
-     * @param string テーブル別名
-     * @param array 抽出条件を格納した配列(キー=列名、値=列値)
+     * @param string $tableName テーブル名
+     * @param string $tableAlias テーブル別名
+     * @param array $columns 抽出条件を格納した配列(キー=列名、値=列値)
      * @return string
      */
     public function whereSyntax($tableName, $tableAlias = null, $columns = array())
@@ -416,9 +421,9 @@ SQL;
     /**
      * ORDER BY節を組み立てて返します。
      *
-     * @param string テーブル名
-     * @param string テーブル別名
-     * @param array 整列順を格納した配列(キー=順序、値=列名 + 昇順/降順)
+     * @param string $tableName テーブル名
+     * @param string $tableAlias テーブル別名
+     * @param array $orders 整列順を格納した配列(キー=順序、値=列名 + 昇順/降順)
      * @return string
      */
     public function orderBySyntax($tableName, $tableAlias = null, $orders = array())
@@ -431,10 +436,10 @@ SQL;
     /**
      * GROUP BY節を組み立てて返します。
      *
-     * @param string テーブル名
-     * @param string テーブル別名
-     * @param array 除外列を格納した配列(値=列名)
-     * @param array 追加列を格納した配列(値=列名)
+     * @param string $tableName テーブル名
+     * @param string $tableAlias テーブル別名
+     * @param array $excludeKeys 除外列を格納した配列(値=列名)
+     * @param array $appendKeys 追加列を格納した配列(値=列名)
      * @return string
      */
     public function groupBySyntax($tableName, $tableAlias = null, $excludeKeys = array(), $appendKeys = array())
@@ -447,8 +452,8 @@ SQL;
     /**
      * Like演算子のパターンとして使用する文字列をエスケープして返します。
      *
-     * @param string 抽出対象項目名
-     * @param string エスケープに使用する文字
+     * @param string $pattern 抽出対象項目名
+     * @param string $escapeChar エスケープに使用する文字
      * @return string エスケープされた文字列
      */
     public function escapeLikePattern($pattern, $escapeChar = '\\')

@@ -46,7 +46,6 @@ class MysqlParameterBuilder extends AbstractParameterBuilder implements Paramete
      * コンストラクタ
      *
      * @param \Volcanus\Database\Driver\DriverInterface
-     * @param array 設定
      */
     public function __construct(DriverInterface $driver)
     {
@@ -56,7 +55,7 @@ class MysqlParameterBuilder extends AbstractParameterBuilder implements Paramete
     /**
      * 値を可変長/固定長文字列を表すSQLパラメータ値に変換します。
      *
-     * @param mixed 値
+     * @param mixed $value 値
      * @return string 変換結果
      */
     public function toText($value)
@@ -73,8 +72,8 @@ class MysqlParameterBuilder extends AbstractParameterBuilder implements Paramete
     /**
      * 値を数値を表すSQLパラメータ値に変換します。
      *
-     * @param mixed 値
-     * @param string 型名 ($typesフィールド参照)
+     * @param int|float|string $value 値
+     * @param string $type 型名 ($typesフィールド参照)
      * @return string 変換結果
      */
     public function toInt($value, $type = null)
@@ -96,8 +95,8 @@ class MysqlParameterBuilder extends AbstractParameterBuilder implements Paramete
     /**
      * 値を浮動小数点数を表すSQLパラメータ値に変換します。
      *
-     * @param mixed 値
-     * @param string 型名 ($typesフィールド参照)
+     * @param int|float|string $value 値
+     * @param string $type 型名 ($typesフィールド参照)
      * @return string 変換結果
      */
     public function toFloat($value, $type = null)
@@ -126,7 +125,7 @@ class MysqlParameterBuilder extends AbstractParameterBuilder implements Paramete
     /**
      * 値を真偽値を表すSQLパラメータ値に変換します。
      *
-     * @param mixed 値
+     * @param mixed $value 値
      * @return string 変換結果
      */
     public function toBool($value)
@@ -151,7 +150,7 @@ class MysqlParameterBuilder extends AbstractParameterBuilder implements Paramete
     /**
      * 値を日付を表すSQLパラメータ値に変換します。
      *
-     * @param mixed 値 int | DateTime | string | array
+     * @param int|\DateTime|string|array $value 値
      * @return string 変換結果
      */
     public function toDate($value)
@@ -237,7 +236,7 @@ class MysqlParameterBuilder extends AbstractParameterBuilder implements Paramete
     /**
      * 値を日時を表すSQLパラメータ値に変換します。
      *
-     * @param mixed 値 int | DateTime | string | array
+     * @param int|\DateTime|string|array $value 値
      * @return string 変換結果
      */
     public function toTimestamp($value)
@@ -345,7 +344,7 @@ class MysqlParameterBuilder extends AbstractParameterBuilder implements Paramete
     /**
      * 値を時刻を表すSQLパラメータ値に変換します。
      *
-     * @param mixed 値 int | DateTime | string | array
+     * @param int|\DateTime|string|array $value 値
      * @return string 変換結果
      */
     public function toTime($value)
@@ -409,7 +408,7 @@ class MysqlParameterBuilder extends AbstractParameterBuilder implements Paramete
     /**
      * 値をGEOMETRY型を表すSQLパラメータ値に変換します。
      *
-     * @param mixed 値 string | array
+     * @param string|array $value 値
      * @return string 変換結果
      */
     public function toGeometry($value)
@@ -444,7 +443,7 @@ class MysqlParameterBuilder extends AbstractParameterBuilder implements Paramete
     /**
      * 値をTINYINT型を表すSQLパラメータ値に変換します。
      *
-     * @param mixed 値
+     * @param int|float|string $value 値
      * @return string 変換結果
      */
     public function toTinyInt($value)
@@ -455,7 +454,7 @@ class MysqlParameterBuilder extends AbstractParameterBuilder implements Paramete
     /**
      * 値をSMALLINT型を表すSQLパラメータ値に変換します。
      *
-     * @param mixed 値
+     * @param int|float|string $value 値
      * @return string 変換結果
      */
     public function toSmallInt($value)
@@ -466,7 +465,7 @@ class MysqlParameterBuilder extends AbstractParameterBuilder implements Paramete
     /**
      * 値をMEDIUMINT型を表すSQLパラメータ値に変換します。
      *
-     * @param mixed 値
+     * @param int|float|string $value 値
      * @return string 変換結果
      */
     public function toMediumInt($value)
@@ -477,7 +476,7 @@ class MysqlParameterBuilder extends AbstractParameterBuilder implements Paramete
     /**
      * 値をBIGINT型を表すSQLパラメータ値に変換します。
      *
-     * @param mixed 値
+     * @param int|float|string $value 値
      * @return string 変換結果
      */
     public function toBigInt($value)
