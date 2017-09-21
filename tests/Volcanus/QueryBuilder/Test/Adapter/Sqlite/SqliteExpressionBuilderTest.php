@@ -18,22 +18,22 @@ use Volcanus\QueryBuilder\Adapter\Sqlite\SqliteExpressionBuilder;
 class SqliteExpressionBuilderTest extends \PHPUnit_Framework_TestCase
 {
 
-	public function testResultColumn()
-	{
-		$builder = new SqliteExpressionBuilder();
-		$this->assertEquals('name AS "alias"', $builder->resultColumn('name', 'alias'));
-	}
+    public function testResultColumn()
+    {
+        $builder = new SqliteExpressionBuilder();
+        $this->assertEquals('name AS "alias"', $builder->resultColumn('name', 'alias'));
+    }
 
-	public function testAsDate()
-	{
-		$builder = new SqliteExpressionBuilder();
-		$this->assertEquals("strftime('%Y-%m-%d', name)", $builder->asDate('name'));
-	}
+    public function testAsDate()
+    {
+        $builder = new SqliteExpressionBuilder();
+        $this->assertEquals("strftime('%Y-%m-%d', name)", $builder->asDate('name'));
+    }
 
-	public function testAsTimestamp()
-	{
-		$builder = new SqliteExpressionBuilder();
-		$this->assertEquals("strftime('%Y-%m-%d %H:%i:%s', name)", $builder->asTimestamp('name'));
-	}
+    public function testAsTimestamp()
+    {
+        $builder = new SqliteExpressionBuilder();
+        $this->assertEquals("strftime('%Y-%m-%d %H:%i:%s', name)", $builder->asTimestamp('name'));
+    }
 
 }
