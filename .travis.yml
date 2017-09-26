@@ -16,11 +16,6 @@ env:
     - DEPENDENCIES="--dev --no-interaction --prefer-source"
     - DEPENDENCIES="--dev --no-interaction --prefer-source --prefer-lowest --prefer-stable"
 
-cache:
-  directories:
-    - vendor
-    - $HOME/.composer/cache
-
 before_script:
   - composer self-update
   - composer require php-coveralls/php-coveralls '~1.0'

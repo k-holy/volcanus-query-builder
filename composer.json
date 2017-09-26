@@ -1,24 +1,26 @@
 {
-    "name": "volcanus/query-builder",
-    "homepage": "https://github.com/k-holy/volcanus-query-builder",
-    "type": "library",
-    "description": "SQL builder for volcanus-database",
-    "version": "0.4.9",
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "k-holy",
-            "email": "k.holy74@gmail.com"
-        }
-    ],
-    "autoload": {
-        "psr-4": { "Volcanus\\QueryBuilder\\": "src/" }
-    },
-    "require": {
-        "php": ">=5.3.9",
-        "volcanus/database": "0.4.*"
-    },
-    "require-dev": {
-        "phpunit/phpunit": "^4.8"
+  "name": "volcanus/query-builder",
+  "homepage": "https://github.com/k-holy/volcanus-query-builder",
+  "type": "library",
+  "description": "SQL builder for volcanus-database",
+  "version": "0.4.9",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "k-holy",
+      "email": "k.holy74@gmail.com"
     }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Volcanus\\QueryBuilder\\": "src/"
+    }
+  },
+  "require": {
+    "php": ">=5.3.9",
+    "volcanus/database": "0.6.*"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^4.8"
+  }
 }
