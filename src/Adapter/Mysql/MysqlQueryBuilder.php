@@ -37,7 +37,7 @@ class MysqlQueryBuilder extends AbstractQueryBuilder implements QueryBuilderInte
     protected static $types = [
         'text' => ['text', 'char', 'varchar', 'tinytext', 'longtext', 'mediumtext'],
         'int' => ['int', 'integer', 'tinyint', 'int4', 'smallint', 'mediumint', 'bigint'],
-        'float' => ['float', 'double', 'real'],
+        'float' => ['decimal', 'float', 'double', 'real'],
         'bool' => ['bool', 'boolean'],
         'date' => ['date'],
         'time' => ['time'],
