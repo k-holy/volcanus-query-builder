@@ -72,6 +72,7 @@ class MysqlQueryBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('float', $builder->parameterType('real'));
         $this->assertEquals('float', $builder->parameterType('double'));
         $this->assertEquals('float', $builder->parameterType('float'));
+        $this->assertEquals('float', $builder->parameterType('decimal'));
     }
 
     public function testParameterTypeOfDate()
