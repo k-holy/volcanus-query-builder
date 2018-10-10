@@ -35,7 +35,7 @@ class MysqlQueryBuilder extends AbstractQueryBuilder implements QueryBuilderInte
      * @var array サポートするデータ型名
      */
     protected static $types = [
-        'text' => ['text', 'char', 'varchar', 'tinytext', 'longtext', 'mediumtext'],
+        'text' => ['text', 'char', 'varchar', 'tinytext', 'longtext', 'mediumtext', 'json'],
         'int' => ['int', 'integer', 'tinyint', 'int4', 'smallint', 'mediumint', 'bigint'],
         'float' => ['decimal', 'float', 'double', 'real'],
         'bool' => ['bool', 'boolean'],
