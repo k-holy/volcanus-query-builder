@@ -45,6 +45,7 @@ class MysqlQueryBuilderTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('text', $builder->parameterType('tinytext'));
         $this->assertEquals('text', $builder->parameterType('longtext'));
         $this->assertEquals('text', $builder->parameterType('mediumtext'));
+        $this->assertEquals('text', $builder->parameterType('json'));
     }
 
     public function testParameterTypeOfInt()
