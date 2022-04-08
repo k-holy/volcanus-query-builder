@@ -8,6 +8,7 @@
 
 namespace Volcanus\QueryBuilder\Test;
 
+use PHPUnit\Framework\TestCase;
 use Volcanus\QueryBuilder\QueryBuilder;
 use Volcanus\Database\Driver\Pdo\PdoDriver;
 
@@ -16,7 +17,7 @@ use Volcanus\Database\Driver\Pdo\PdoDriver;
  *
  * @author k.holy74@gmail.com
  */
-class QueryBuilderTest extends \PHPUnit\Framework\TestCase
+class QueryBuilderTest extends TestCase
 {
 
     public function testCreateAdapterByFactory()

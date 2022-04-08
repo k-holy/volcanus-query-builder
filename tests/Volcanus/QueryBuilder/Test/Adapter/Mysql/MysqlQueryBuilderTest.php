@@ -8,6 +8,7 @@
 
 namespace Volcanus\QueryBuilder\Test\Adapter\Mysql;
 
+use PHPUnit\Framework\TestCase;
 use Volcanus\QueryBuilder\Adapter\Mysql\MysqlQueryBuilder;
 use Volcanus\QueryBuilder\Adapter\Mysql\MysqlExpressionBuilder;
 use Volcanus\QueryBuilder\Adapter\Mysql\MysqlParameterBuilder;
@@ -20,7 +21,7 @@ use Volcanus\Database\MetaData\MysqlMetaDataProcessor;
  *
  * @author k.holy74@gmail.com
  */
-class MysqlQueryBuilderTest extends \PHPUnit\Framework\TestCase
+class MysqlQueryBuilderTest extends TestCase
 {
 
     private static $pdo;
@@ -163,11 +164,9 @@ class MysqlQueryBuilderTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testParameterRaiseExceptionWhenUnsupportedType()
     {
+        $this->expectException(\InvalidArgumentException::class);
         $builder = new MysqlQueryBuilder(
             new MysqlExpressionBuilder(),
             new MysqlParameterBuilder(new PdoDriver($this->getPdo(), new MysqlMetaDataProcessor()))
@@ -307,11 +306,9 @@ class MysqlQueryBuilderTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testExpressionRaiseExceptionWhenUnsupportedType()
     {
+        $this->expectException(\InvalidArgumentException::class);
         $builder = new MysqlQueryBuilder(
             new MysqlExpressionBuilder(),
             new MysqlParameterBuilder(new PdoDriver($this->getPdo(), new MysqlMetaDataProcessor()))

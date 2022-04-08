@@ -8,12 +8,14 @@
 
 namespace Volcanus\QueryBuilder\Test;
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * Test for AbstractParameter
  *
  * @author k.holy74@gmail.com
  */
-class AbstractQueryBuilderTest extends \PHPUnit\Framework\TestCase
+class AbstractQueryBuilderTest extends TestCase
 {
 
     public function testParameterTypeOfText()
@@ -139,11 +141,9 @@ class AbstractQueryBuilderTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals("TO_TIMESTAMP('2013-01-02 00:00:00')", $builder->parameter('2013-01-02 00:00:00', 'timestamp'));
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testParameterRaiseExceptionWhenUnsupportedType()
     {
+        $this->expectException(\InvalidArgumentException::class);
         $builder = new QueryBuilder(
             new ExpressionBuilder(),
             new ParameterBuilder()
@@ -257,11 +257,9 @@ class AbstractQueryBuilderTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testExpressionRaiseExceptionWhenUnsupportedType()
     {
+        $this->expectException(\InvalidArgumentException::class);
         $builder = new QueryBuilder(
             new ExpressionBuilder(),
             new ParameterBuilder()

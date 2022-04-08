@@ -8,6 +8,7 @@
 
 namespace Volcanus\QueryBuilder\Test\Adapter\Mysql;
 
+use PHPUnit\Framework\TestCase;
 use Volcanus\QueryBuilder\Adapter\Mysql\MysqlExpressionBuilder;
 
 /**
@@ -15,7 +16,7 @@ use Volcanus\QueryBuilder\Adapter\Mysql\MysqlExpressionBuilder;
  *
  * @author k.holy74@gmail.com
  */
-class MysqlExpressionBuilderTest extends \PHPUnit\Framework\TestCase
+class MysqlExpressionBuilderTest extends TestCase
 {
 
     public function testResultColumn()

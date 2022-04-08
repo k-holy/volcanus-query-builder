@@ -11,8 +11,6 @@ namespace Volcanus\QueryBuilder\Adapter\Sqlite;
 use Volcanus\QueryBuilder\QueryBuilderInterface;
 use Volcanus\QueryBuilder\AbstractQueryBuilder;
 
-use Volcanus\QueryBuilder\QueryBuilder;
-
 /**
  * SQLite クエリビルダ
  *
@@ -22,12 +20,12 @@ class SqliteQueryBuilder extends AbstractQueryBuilder implements QueryBuilderInt
 {
 
     /**
-     * @var \Volcanus\QueryBuilder\Adapter\Sqlite\SqliteExpressionBuilder
+     * @var SqliteExpressionBuilder
      */
     protected $expressionBuilder;
 
     /**
-     * @var \Volcanus\QueryBuilder\Adapter\Sqlite\SqliteParameterBuilder
+     * @var SqliteParameterBuilder
      */
     protected $parameterBuilder;
 
@@ -55,8 +53,8 @@ class SqliteQueryBuilder extends AbstractQueryBuilder implements QueryBuilderInt
     /**
      * コンストラクタ
      *
-     * @param \Volcanus\QueryBuilder\Adapter\Sqlite\SqliteExpressionBuilder $expressionBuilder
-     * @param \Volcanus\QueryBuilder\Adapter\Sqlite\SqliteParameterBuilder $parameterBuilder
+     * @param SqliteExpressionBuilder $expressionBuilder
+     * @param SqliteParameterBuilder $parameterBuilder
      */
     public function __construct(SqliteExpressionBuilder $expressionBuilder, SqliteParameterBuilder $parameterBuilder)
     {
@@ -68,18 +66,18 @@ class SqliteQueryBuilder extends AbstractQueryBuilder implements QueryBuilderInt
      * SELECT文にLIMIT値およびOFFSET値を付与して返します。
      *
      * @param string $sql SELECT文
-     * @param int $limit 最大取得件数
-     * @param int $offset 取得開始行index
+     * @param int|null $limit 最大取得件数
+     * @param int|null $offset 取得開始行index
      * @return string SQL
      */
-    public function limitOffset($sql, $limit = null, $offset = null)
+    public function limitOffset(string $sql, int $limit = null, int $offset = null): string
     {
         $sql .= sprintf(' LIMIT %s',
-            (isset($limit) && (int)$limit >= 0)
+            (isset($limit) && $limit >= 0)
                 ? $this->parameterBuilder->toInt($limit)
                 : '18446744073709551615'
         );
-        if (isset($offset) && (int)$offset >= 0) {
+        if (isset($offset) && $offset >= 0) {
             $sql .= sprintf(' OFFSET %s',
                 $this->parameterBuilder->toInt($offset)
             );
@@ -93,7 +91,7 @@ class SqliteQueryBuilder extends AbstractQueryBuilder implements QueryBuilderInt
      * @param string $sql SELECT文
      * @return string SQL
      */
-    public function count($sql)
+    public function count(string $sql): string
     {
         return sprintf('SELECT COUNT(*) FROM (%s) AS __SUBQUERY', $sql);
     }
