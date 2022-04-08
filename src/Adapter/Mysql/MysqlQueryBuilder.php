@@ -11,8 +11,6 @@ namespace Volcanus\QueryBuilder\Adapter\Mysql;
 use Volcanus\QueryBuilder\QueryBuilderInterface;
 use Volcanus\QueryBuilder\AbstractQueryBuilder;
 
-use Volcanus\QueryBuilder\QueryBuilder;
-
 /**
  * MySQL クエリビルダ
  *
@@ -22,12 +20,12 @@ class MysqlQueryBuilder extends AbstractQueryBuilder implements QueryBuilderInte
 {
 
     /**
-     * @var \Volcanus\QueryBuilder\Adapter\Mysql\MysqlExpressionBuilder
+     * @var MysqlExpressionBuilder
      */
     protected $expressionBuilder;
 
     /**
-     * @var \Volcanus\QueryBuilder\Adapter\Mysql\MysqlParameterBuilder
+     * @var MysqlParameterBuilder
      */
     protected $parameterBuilder;
 
@@ -48,8 +46,8 @@ class MysqlQueryBuilder extends AbstractQueryBuilder implements QueryBuilderInte
     /**
      * コンストラクタ
      *
-     * @param \Volcanus\QueryBuilder\Adapter\Mysql\MysqlExpressionBuilder $expressionBuilder
-     * @param \Volcanus\QueryBuilder\Adapter\Mysql\MysqlParameterBuilder $parameterBuilder
+     * @param MysqlExpressionBuilder $expressionBuilder
+     * @param MysqlParameterBuilder $parameterBuilder
      */
     public function __construct(MysqlExpressionBuilder $expressionBuilder, MysqlParameterBuilder $parameterBuilder)
     {
@@ -61,16 +59,16 @@ class MysqlQueryBuilder extends AbstractQueryBuilder implements QueryBuilderInte
      * SELECT文にLIMIT値およびOFFSET値を付与して返します。
      *
      * @param string $sql SELECT文
-     * @param int $limit 最大取得件数
-     * @param int $offset 取得開始行index
+     * @param int|null $limit 最大取得件数
+     * @param int|null $offset 取得開始行index
      * @return string SQL
      */
-    public function limitOffset($sql, $limit = null, $offset = null)
+    public function limitOffset(string $sql, int $limit = null, int $offset = null): string
     {
         return sprintf('%s LIMIT %s%s',
             $sql,
-            (isset($offset) && (int)$offset >= 0) ? $this->parameterBuilder->toInt($offset) . ',' : '',
-            (isset($limit) && (int)$limit >= 0) ? $this->parameterBuilder->toInt($limit) : '18446744073709551615'
+            (isset($offset) && $offset >= 0) ? $this->parameterBuilder->toInt($offset) . ',' : '',
+            (isset($limit) && $limit >= 0) ? $this->parameterBuilder->toInt($limit) : '18446744073709551615'
         );
     }
 
@@ -80,7 +78,7 @@ class MysqlQueryBuilder extends AbstractQueryBuilder implements QueryBuilderInte
      * @param string $sql SELECT文
      * @return string SQL
      */
-    public function count($sql)
+    public function count(string $sql): string
     {
         if (false !== strpos($sql, 'SQL_CALC_FOUND_ROWS')) {
             return 'SELECT FOUND_ROWS()';

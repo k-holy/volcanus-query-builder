@@ -8,6 +8,7 @@
 
 namespace Volcanus\QueryBuilder\Test;
 
+use PHPUnit\Framework\TestCase;
 use Volcanus\QueryBuilder\Facade;
 use Volcanus\QueryBuilder\QueryBuilder;
 
@@ -23,18 +24,18 @@ use Volcanus\Database\MetaData\SqliteMetaDataProcessor;
  *
  * @author k.holy74@gmail.com
  */
-class FacadeTest extends \PHPUnit\Framework\TestCase
+class FacadeTest extends TestCase
 {
 
     /** @var \PDO */
     private static $pdo;
 
-    private function getPdo()
+    private function getPdo(): \PDO
     {
         if (!isset(static::$pdo)) {
             static::$pdo = new \PDO('sqlite::memory:');
             static::$pdo->exec(<<<SQL
-CREATE TABLE test(
+CREATE TABLE IF NOT EXISTS test(
      id         INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL
     ,name       TEXT
     ,updated_at DATETIME NOT NULL
@@ -45,7 +46,7 @@ SQL
         return static::$pdo;
     }
 
-    private function getDriver()
+    private function getDriver(): PdoDriver
     {
         return new PdoDriver(
             $this->getPdo(),
@@ -53,7 +54,7 @@ SQL
         );
     }
 
-    private function getBuilder()
+    private function getBuilder(): SqliteQueryBuilder
     {
         return new SqliteQueryBuilder(
             new SqliteExpressionBuilder(),
@@ -65,7 +66,7 @@ SQL
     {
         $pdo = $this->getPdo();
         $pdo->exec(<<<SQL
-CREATE TABLE users(
+CREATE TABLE IF NOT EXISTS users(
      user_id    INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL
     ,user_name  TEXT
     ,updated_at DATETIME NOT NULL

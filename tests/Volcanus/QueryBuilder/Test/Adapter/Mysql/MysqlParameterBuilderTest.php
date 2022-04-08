@@ -8,6 +8,7 @@
 
 namespace Volcanus\QueryBuilder\Test\Adapter\Mysql;
 
+use PHPUnit\Framework\TestCase;
 use Volcanus\QueryBuilder\QueryBuilder;
 use Volcanus\QueryBuilder\Adapter\Mysql\MysqlParameterBuilder;
 
@@ -19,7 +20,7 @@ use Volcanus\Database\MetaData\MysqlMetaDataProcessor;
  *
  * @author k.holy74@gmail.com
  */
-class MysqlParameterBuilderTest extends \PHPUnit\Framework\TestCase
+class MysqlParameterBuilderTest extends TestCase
 {
 
     private static $pdo;
@@ -394,14 +395,13 @@ class MysqlParameterBuilderTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('NULL', $builder->ToDate(''));
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testToDateRaiseExceptionWhenInvalidValue()
     {
+        $this->expectException(\InvalidArgumentException::class);
         $builder = new MysqlParameterBuilder(
             new PdoDriver($this->getPdo(), new MysqlMetaDataProcessor())
         );
+        /** @noinspection PhpParamsInspection */
         $builder->ToDate(new \stdClass());
     }
 
@@ -523,14 +523,13 @@ class MysqlParameterBuilderTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('NULL', $builder->toTimestamp(''));
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testToTimestampRaiseExceptionWhenInvalidValue()
     {
+        $this->expectException(\InvalidArgumentException::class);
         $builder = new MysqlParameterBuilder(
             new PdoDriver($this->getPdo(), new MysqlMetaDataProcessor())
         );
+        /** @noinspection PhpParamsInspection */
         $builder->toTimestamp(new \stdClass());
     }
 
@@ -631,14 +630,13 @@ class MysqlParameterBuilderTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('NULL', $builder->toTime(''));
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testToTimeRaiseExceptionWhenInvalidValue()
     {
+        $this->expectException(\InvalidArgumentException::class);
         $builder = new MysqlParameterBuilder(
             new PdoDriver($this->getPdo(), new MysqlMetaDataProcessor())
         );
+        /** @noinspection PhpParamsInspection */
         $builder->toTime(new \stdClass());
     }
 
@@ -739,14 +737,13 @@ class MysqlParameterBuilderTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('NULL', $builder->toGeometry([]));
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testToGeometryRaiseExceptionWhenInvalidValue()
     {
+        $this->expectException(\InvalidArgumentException::class);
         $builder = new MysqlParameterBuilder(
             new PdoDriver($this->getPdo(), new MysqlMetaDataProcessor())
         );
+        /** @noinspection PhpParamsInspection */
         $builder->toGeometry(new \stdClass());
     }
 

@@ -8,6 +8,7 @@
 
 namespace Volcanus\QueryBuilder\Test\Adapter\Sqlite;
 
+use PHPUnit\Framework\TestCase;
 use Volcanus\QueryBuilder\QueryBuilder;
 use Volcanus\QueryBuilder\Adapter\Sqlite\SqliteParameterBuilder;
 
@@ -19,7 +20,7 @@ use Volcanus\Database\MetaData\SqliteMetaDataProcessor;
  *
  * @author k.holy74@gmail.com
  */
-class SqliteParameterBuilderTest extends \PHPUnit\Framework\TestCase
+class SqliteParameterBuilderTest extends TestCase
 {
 
     private static $pdo;
@@ -316,14 +317,13 @@ class SqliteParameterBuilderTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('NULL', $builder->ToDate(''));
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testToDateRaiseExceptionWhenInvalidValue()
     {
+        $this->expectException(\InvalidArgumentException::class);
         $builder = new SqliteParameterBuilder(
             new PdoDriver($this->getPdo(), new SqliteMetaDataProcessor())
         );
+        /** @noinspection PhpParamsInspection */
         $builder->ToDate(new \stdClass());
     }
 
@@ -430,14 +430,13 @@ class SqliteParameterBuilderTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('NULL', $builder->toTimestamp(''));
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testToTimestampRaiseExceptionWhenInvalidValue()
     {
+        $this->expectException(\InvalidArgumentException::class);
         $builder = new SqliteParameterBuilder(
             new PdoDriver($this->getPdo(), new SqliteMetaDataProcessor())
         );
+        /** @noinspection PhpParamsInspection */
         $builder->toTimestamp(new \stdClass());
     }
 
