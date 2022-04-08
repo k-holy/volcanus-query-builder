@@ -30,7 +30,7 @@ class QueryBuilder extends AbstractQueryBuilder implements QueryBuilderInterface
         $this->setParameterBuilder($parameterBuilder);
     }
 
-    public function limitOffset($sql, $limit = null, $offset = null)
+    public function limitOffset(string $sql, int $limit = null, int $offset = null): string
     {
         return sprintf("%s LIMIT %d OFFSET %d",
             $sql,
@@ -39,7 +39,7 @@ class QueryBuilder extends AbstractQueryBuilder implements QueryBuilderInterface
         );
     }
 
-    public function count($sql)
+    public function count(string $sql): string
     {
         return sprintf("SELECT COUNT(*) FROM (%s) AS X", $sql);
     }

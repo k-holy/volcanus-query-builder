@@ -9,8 +9,6 @@
 namespace Volcanus\QueryBuilder;
 
 use Volcanus\Database\Driver\DriverInterface;
-use Volcanus\QueryBuilder\QueryBuilderInterface;
-use Volcanus\QueryBuilder\Facade;
 
 /**
  * クエリビルダ
@@ -29,10 +27,10 @@ class QueryBuilder
     /**
      * ファサードクラスを生成します。
      *
-     * @param \Volcanus\Database\Driver\DriverInterface
-     * @return \Volcanus\QueryBuilder\Facade
+     * @param DriverInterface $driver
+     * @return Facade
      */
-    public static function facade(DriverInterface $driver)
+    public static function facade(DriverInterface $driver): Facade
     {
         return new Facade($driver, static::factory($driver));
     }
@@ -40,10 +38,10 @@ class QueryBuilder
     /**
      * 指定されたドライバに合ったクエリビルダクラスを生成します。
      *
-     * @param \Volcanus\Database\Driver\DriverInterface
-     * @return \Volcanus\QueryBuilder\QueryBuilderInterface
+     * @param DriverInterface $driver
+     * @return QueryBuilderInterface
      */
-    public static function factory(DriverInterface $driver)
+    public static function factory(DriverInterface $driver): QueryBuilderInterface
     {
         $driverName = $driver->getDriverName();
         if (!isset($driverName)) {

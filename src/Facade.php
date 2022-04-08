@@ -8,8 +8,6 @@
 
 namespace Volcanus\QueryBuilder;
 
-use Volcanus\QueryBuilder\QueryBuilder;
-use Volcanus\QueryBuilder\QueryBuilderInterface;
 use Volcanus\Database\Driver\DriverInterface;
 
 /**
@@ -20,12 +18,12 @@ use Volcanus\Database\Driver\DriverInterface;
 class Facade
 {
     /**
-     * @var \Volcanus\Database\Driver\DriverInterface
+     * @var DriverInterface
      */
     private $driver;
 
     /**
-     * @var \Volcanus\QueryBuilder\QueryBuilderInterface
+     * @var QueryBuilderInterface
      */
     private $builder;
 
@@ -37,8 +35,8 @@ class Facade
     /**
      * Facade constructor.
      *
-     * @param \Volcanus\Database\Driver\DriverInterface $driver
-     * @param \Volcanus\QueryBuilder\QueryBuilderInterface $builder
+     * @param DriverInterface $driver
+     * @param QueryBuilderInterface $builder
      */
     public function __construct(DriverInterface $driver, QueryBuilderInterface $builder)
     {
@@ -49,7 +47,7 @@ class Facade
     /**
      * 取得するカラム名をキャメルケースに変換するかどうかを設定します。
      *
-     * @param boolean $enabled 取得するカラム名をキャメルケースに変換するかどうか
+     * @param mixed $enabled 取得するカラム名をキャメルケースに変換するかどうか
      */
     public function enableCamelize($enabled = true)
     {
@@ -60,11 +58,11 @@ class Facade
      * データ型に合わせて項目を別名で取得するSQL句を生成します。
      *
      * @param string $expr 項目名
-     * @param string $type データ型
-     * @param string $alias 別名
+     * @param string|null $type データ型
+     * @param string|null $alias 別名
      * @return string SQL句
      */
-    public function expression($expr, $type = null, $alias = null)
+    public function expression(string $expr, string $type = null, string $alias = null): string
     {
         return $this->builder->expression($expr, $type, $alias);
     }
@@ -73,12 +71,12 @@ class Facade
      * カラム定義に従い、SELECT句の配列を生成します。
      *
      * @param string $tableName テーブル名
-     * @param string $tableAlias テーブル別名
-     * @param array $excludeKeys 除外列名のリスト
-     * @param array $columnAliases 別名取得設定 (キー=列名、値=別名)
+     * @param string|null $tableAlias テーブル別名
+     * @param array|null $excludeKeys 除外列名のリスト
+     * @param array|null $columnAliases 別名取得設定 (キー=列名、値=別名)
      * @return array SQL SELECT句となる列指定の配列
      */
-    public function expressions($tableName, $tableAlias = null, $excludeKeys = [], $columnAliases = [])
+    public function expressions(string $tableName, string $tableAlias = null, ?array $excludeKeys = [], ?array $columnAliases = []): array
     {
         $metaColumns = $this->driver->getMetaColumns($tableName);
         $expressions = [];
@@ -99,11 +97,11 @@ class Facade
     /**
      * 値を指定した型に応じたSQLパラメータ値に変換します。
      *
-     * @param string $value データ
+     * @param mixed $value データ
      * @param string $type 型名 ($typesフィールド参照)
      * @return string 変換結果
      */
-    public function parameter($value, $type)
+    public function parameter($value, string $type): string
     {
         return $this->builder->parameter($value, $type);
     }
@@ -117,7 +115,7 @@ class Facade
      * @param array $columns 登録内容 array(列名 => 列値, 列名 => 列値...)
      * @return array 変換済みの登録内容の配列
      */
-    public function parameters($tableName, $columns)
+    public function parameters(string $tableName, array $columns): array
     {
         $metaColumns = $this->driver->getMetaColumns($tableName);
         $expressions = [];
@@ -145,7 +143,7 @@ class Facade
      * @param array $columns 登録内容 array(列名 => 列値, 列名 => 列値...)
      * @return string SQL
      */
-    public function insert($tableName, $columns)
+    public function insert(string $tableName, array $columns): string
     {
         $parameters = $this->parameters($tableName, $columns);
         $insertColumnNames = join(', ', array_keys($parameters));
@@ -164,10 +162,10 @@ SQL;
      *
      * @param string $tableName テーブル名
      * @param array $columns 更新内容 array(列名 => 列値, 列名 => 列値...)
-     * @param string $where WHERE句
+     * @param string|null $where WHERE句
      * @return string SQL
      */
-    public function update($tableName, $columns, $where = null)
+    public function update(string $tableName, array $columns, string $where = null): string
     {
         $parameters = $this->parameters($tableName, $columns);
         $updateColumnSet = [];
@@ -190,10 +188,10 @@ SQL;
      * DELETE文を組み立てて返します。
      *
      * @param string $tableName テーブル名
-     * @param string $where WHERE句
+     * @param string|null $where WHERE句
      * @return string SQL
      */
-    public function delete($tableName, $where = null)
+    public function delete(string $tableName, string $where = null): string
     {
         $sql = <<<SQL
 DELETE FROM
@@ -208,25 +206,25 @@ SQL;
      * SELECT節を組み立てて返します。
      *
      * @param string $tableName テーブル名
-     * @param string $tableAlias テーブル別名
-     * @param array $excludeKeys 除外列名のリスト
-     * @param array $columnAliases 別名取得設定 (キー=列名、値=別名)
+     * @param string|null $tableAlias テーブル別名
+     * @param array|null $excludeKeys 除外列名のリスト
+     * @param array|null $columnAliases 別名取得設定 (キー=列名、値=別名)
      * @return string SQL
      */
-    public function selectSyntax($tableName, $tableAlias = null, $excludeKeys = [], $columnAliases = [])
+    public function selectSyntax(string $tableName, string $tableAlias = null, ?array $excludeKeys = [], ?array $columnAliases = []): string
     {
         $expressions = $this->expressions($tableName, $tableAlias, $excludeKeys, $columnAliases);
-        return (is_array($expressions) && count($expressions) >= 1) ? "SELECT\n" . join(",\n", $expressions) : '';
+        return (count($expressions) >= 1) ? "SELECT\n" . join(",\n", $expressions) : '';
     }
 
     /**
      * FROM節を組み立てて返します。
      *
      * @param string $tableName テーブル名
-     * @param string $tableAlias テーブル別名
+     * @param string|null $tableAlias テーブル別名
      * @return string SQL FROM節
      */
-    public function fromSyntax($tableName, $tableAlias = null)
+    public function fromSyntax(string $tableName, string $tableAlias = null): string
     {
         return (isset($tableAlias)) ? "FROM\n{$tableName} {$tableAlias}" : "FROM\n{$tableName}";
     }
@@ -235,13 +233,13 @@ SQL;
      * SELECT文を組み立てて返します。
      *
      * @param string $tableName テーブル名
-     * @param string $tableAlias テーブル別名
-     * @param string $where WHERE句
-     * @param array $excludeKeys 除外列名のリスト
-     * @param array $columnAliases 別名取得設定 (キー=列名、値=別名)
+     * @param string|null $tableAlias テーブル別名
+     * @param string|null $where WHERE句
+     * @param array|null $excludeKeys 除外列名のリスト
+     * @param array|null $columnAliases 別名取得設定 (キー=列名、値=別名)
      * @return string SQL
      */
-    public function select($tableName, $tableAlias = null, $where = null, $excludeKeys = [], $columnAliases = [])
+    public function select(string $tableName, string $tableAlias = null, string $where = null, ?array $excludeKeys = [], ?array $columnAliases = []): string
     {
         $sql = join("\n", [
             $this->selectSyntax($tableName, $tableAlias, $excludeKeys, $columnAliases),
@@ -258,7 +256,7 @@ SQL;
      * @param string $sql SELECT文
      * @return string SQL
      */
-    public function count($sql)
+    public function count(string $sql): string
     {
         return $this->builder->count($sql);
     }
@@ -267,11 +265,11 @@ SQL;
      * SELECT文にLIMIT値およびOFFSET値を付与して返します。
      *
      * @param string $sql SELECT文
-     * @param int $limit 最大取得件数
-     * @param int $offset 取得開始行index
+     * @param int|null $limit 最大取得件数
+     * @param int|null $offset 取得開始行index
      * @return string SQL
      */
-    public function limitOffset($sql, $limit = null, $offset = null)
+    public function limitOffset(string $sql, int $limit = null, int $offset = null): string
     {
         return $this->builder->limitOffset($sql, $limit, $offset);
     }
@@ -280,11 +278,11 @@ SQL;
      * 抽出条件およびスキーマ情報に合わせてSQLのWHERE句を作成します。
      *
      * @param string $tableName テーブル名
-     * @param string $tableAlias テーブル別名
+     * @param string|null $tableAlias テーブル別名
      * @param array $columns 抽出条件を格納した配列(キー=列名、値=列値)
      * @return array SQL WHERE句となる抽出条件の配列
      */
-    public function whereExpressions($tableName, $tableAlias = null, $columns = [])
+    public function whereExpressions(string $tableName, string $tableAlias = null, array $columns = []): array
     {
         $metaColumns = $this->driver->getMetaColumns($tableName);
         $expressions = [];
@@ -353,12 +351,12 @@ SQL;
     /**
      * 抽出条件およびスキーマ情報に合わせてSQLのORDER BY句を作成します。
      *
-     * @param string $tableName テーブル名
-     * @param string $tableAlias テーブル別名
+     * @param string|null $tableName テーブル名
+     * @param string|null $tableAlias テーブル別名
      * @param array $orders 整列順を格納した配列(キー=順序、値=列名 + 昇順/降順)
      * @return array SQL ORDER BY句となる列名の配列
      */
-    public function orderByExpressions($tableName = null, $tableAlias = null, $orders = [])
+    public function orderByExpressions(string $tableName = null, string $tableAlias = null, array $orders = []): array
     {
         $metaColumns = ($tableName !== null) ? $this->driver->getMetaColumns($tableName) : [];
         $expressions = [];
@@ -389,12 +387,12 @@ SQL;
      * 抽出条件およびスキーマ情報に合わせてSQLのGROUP BY句を作成します。
      *
      * @param string $tableName テーブル名
-     * @param string $tableAlias テーブル別名
+     * @param string|null $tableAlias テーブル別名
      * @param array $excludeKeys 除外列を格納した配列(値=列名)
      * @param array $appendKeys 追加列を格納した配列(値=列名)
      * @return array SQL GROUP BY句となる列名の配列
      */
-    public function groupByExpressions($tableName, $tableAlias = null, $excludeKeys = [], $appendKeys = [])
+    public function groupByExpressions(string $tableName, string $tableAlias = null, array $excludeKeys = [], array $appendKeys = []): array
     {
         $metaColumns = $this->driver->getMetaColumns($tableName);
         $expressions = [];
@@ -412,14 +410,14 @@ SQL;
      * WHERE節を組み立てて返します。
      *
      * @param string $tableName テーブル名
-     * @param string $tableAlias テーブル別名
+     * @param string|null $tableAlias テーブル別名
      * @param array $columns 抽出条件を格納した配列(キー=列名、値=列値)
      * @return string
      */
-    public function whereSyntax($tableName, $tableAlias = null, $columns = [])
+    public function whereSyntax(string $tableName, string $tableAlias = null, array $columns = []): string
     {
         $expressions = $this->whereExpressions($tableName, $tableAlias, $columns);
-        $where = (is_array($expressions) && count($expressions) > 0) ? join(" AND\n", $expressions) : '';
+        $where = (count($expressions) > 0) ? join(" AND\n", $expressions) : '';
         return (strlen($where) >= 1) ? "WHERE\n{$where}" : '';
     }
 
@@ -427,14 +425,14 @@ SQL;
      * ORDER BY節を組み立てて返します。
      *
      * @param string $tableName テーブル名
-     * @param string $tableAlias テーブル別名
+     * @param string|null $tableAlias テーブル別名
      * @param array $orders 整列順を格納した配列(キー=順序、値=列名 + 昇順/降順)
      * @return string
      */
-    public function orderBySyntax($tableName, $tableAlias = null, $orders = [])
+    public function orderBySyntax(string $tableName, string $tableAlias = null, array $orders = []): string
     {
         $expressions = $this->orderByExpressions($tableName, $tableAlias, $orders);
-        $orderBy = (is_array($expressions) && count($expressions) > 0) ? join(" ,\n", $expressions) : '';
+        $orderBy = (count($expressions) > 0) ? join(" ,\n", $expressions) : '';
         return (strlen($orderBy) >= 1) ? "ORDER BY\n{$orderBy}" : '';
     }
 
@@ -442,15 +440,15 @@ SQL;
      * GROUP BY節を組み立てて返します。
      *
      * @param string $tableName テーブル名
-     * @param string $tableAlias テーブル別名
+     * @param string|null $tableAlias テーブル別名
      * @param array $excludeKeys 除外列を格納した配列(値=列名)
      * @param array $appendKeys 追加列を格納した配列(値=列名)
      * @return string
      */
-    public function groupBySyntax($tableName, $tableAlias = null, $excludeKeys = [], $appendKeys = [])
+    public function groupBySyntax(string $tableName, string $tableAlias = null, array $excludeKeys = [], array $appendKeys = []): string
     {
         $expressions = $this->groupByExpressions($tableName, $tableAlias, $excludeKeys, $appendKeys);
-        $groupBy = (is_array($expressions) && count($expressions) > 0) ? join(" ,\n", $expressions) : '';
+        $groupBy = (count($expressions) > 0) ? join(" ,\n", $expressions) : '';
         return (strlen($groupBy) >= 1) ? "GROUP BY\n{$groupBy}" : '';
     }
 
@@ -461,7 +459,7 @@ SQL;
      * @param string $escapeChar エスケープに使用する文字
      * @return string エスケープされた文字列
      */
-    public function escapeLikePattern($pattern, $escapeChar = '\\')
+    public function escapeLikePattern(string $pattern, string $escapeChar = '\\'): string
     {
         return $this->builder->escapeLikePattern($pattern, $escapeChar);
     }
@@ -470,7 +468,7 @@ SQL;
      * @param string $string
      * @return string
      */
-    private function camelize($string)
+    private function camelize(string $string): string
     {
         return lcfirst(str_replace(' ', '', ucwords(str_replace('_', ' ', $string))));
     }
@@ -479,7 +477,7 @@ SQL;
      * @param string $string
      * @return string
      */
-    private function underscore($string)
+    private function underscore(string $string): string
     {
         return strtolower(preg_replace('/[A-Z]/', '_$0', lcfirst($string)));
     }

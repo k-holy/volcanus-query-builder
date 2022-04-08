@@ -8,12 +8,14 @@
 
 namespace Volcanus\QueryBuilder\Test;
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * Test for AbstractParameter
  *
  * @author k.holy74@gmail.com
  */
-class AbstractParameterBuilderTest extends \PHPUnit\Framework\TestCase
+class AbstractParameterBuilderTest extends TestCase
 {
 
     public function testToText()
@@ -31,7 +33,7 @@ class AbstractParameterBuilderTest extends \PHPUnit\Framework\TestCase
     public function testToFloat()
     {
         $builder = new ParameterBuilder();
-        $this->assertEquals('1.0', $builder->toFloat(1.0));
+        $this->assertEquals('1.5', $builder->toFloat(1.5));
     }
 
     public function testToBool()

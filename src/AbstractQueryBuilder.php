@@ -8,10 +8,6 @@
 
 namespace Volcanus\QueryBuilder;
 
-use Volcanus\QueryBuilder\ExpressionBuilderInterface;
-use Volcanus\QueryBuilder\ParameterBuilderInterface;
-use Volcanus\QueryBuilder\QueryBuilderInterface;
-
 /**
  * クエリビルダ抽象クラス
  *
@@ -21,12 +17,12 @@ abstract class AbstractQueryBuilder implements QueryBuilderInterface
 {
 
     /**
-     * @var \Volcanus\QueryBuilder\ExpressionBuilderInterface
+     * @var ExpressionBuilderInterface
      */
     protected $expressionBuilder;
 
     /**
-     * @var \Volcanus\QueryBuilder\ParameterBuilderInterface
+     * @var ParameterBuilderInterface
      */
     protected $parameterBuilder;
 
@@ -36,7 +32,7 @@ abstract class AbstractQueryBuilder implements QueryBuilderInterface
     protected static $types = [];
 
     /**
-     * @param \Volcanus\QueryBuilder\ExpressionBuilderInterface
+     * @param ExpressionBuilderInterface
      */
     protected function setExpressionBuilder(ExpressionBuilderInterface $expressionBuilder)
     {
@@ -44,7 +40,7 @@ abstract class AbstractQueryBuilder implements QueryBuilderInterface
     }
 
     /**
-     * @param \Volcanus\QueryBuilder\ParameterBuilderInterface
+     * @param ParameterBuilderInterface
      */
     protected function setParameterBuilder(ParameterBuilderInterface $parameterBuilder)
     {
@@ -57,7 +53,7 @@ abstract class AbstractQueryBuilder implements QueryBuilderInterface
      * @param string $type 型名 ($typesフィールド参照)
      * @return string SQLパラメータ用の型名
      */
-    public function parameterType($type)
+    public function parameterType(string $type)
     {
         $type = strtolower($type);
         foreach (static::$types as $parameterType => $parameterTypes) {
@@ -75,7 +71,7 @@ abstract class AbstractQueryBuilder implements QueryBuilderInterface
      * @param string $type 型名 ($typesフィールド参照)
      * @return string 変換結果
      */
-    public function parameter($value, $type)
+    public function parameter($value, string $type): string
     {
         $sqlType = $this->parameterType($type);
         if (!$sqlType) {
@@ -96,11 +92,11 @@ abstract class AbstractQueryBuilder implements QueryBuilderInterface
      * データ型に合わせて項目を別名で取得するSQL句を生成します。
      *
      * @param string $expr 項目名
-     * @param string $type データ型
-     * @param string $alias 別名
+     * @param string|null $type データ型
+     * @param string|null $alias 別名
      * @return string SQL句
      */
-    public function expression($expr, $type = null, $alias = null)
+    public function expression(string $expr, string $type = null, string $alias = null): string
     {
         if (isset($type)) {
             $sqlType = $this->parameterType($type);
@@ -127,7 +123,7 @@ abstract class AbstractQueryBuilder implements QueryBuilderInterface
      * @param string $escapeChar エスケープに使用する文字
      * @return string エスケープされた文字列
      */
-    public function escapeLikePattern($pattern, $escapeChar = '\\')
+    public function escapeLikePattern(string $pattern, string $escapeChar = '\\'): string
     {
         $transTable = [
             '_' => "{$escapeChar}_",

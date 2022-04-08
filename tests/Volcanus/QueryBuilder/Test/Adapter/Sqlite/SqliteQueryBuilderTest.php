@@ -8,6 +8,7 @@
 
 namespace Volcanus\QueryBuilder\Test\Adapter\Sqlite;
 
+use PHPUnit\Framework\TestCase;
 use Volcanus\QueryBuilder\Adapter\Sqlite\SqliteQueryBuilder;
 use Volcanus\QueryBuilder\Adapter\Sqlite\SqliteExpressionBuilder;
 use Volcanus\QueryBuilder\Adapter\Sqlite\SqliteParameterBuilder;
@@ -20,7 +21,7 @@ use Volcanus\Database\MetaData\SqliteMetaDataProcessor;
  *
  * @author k.holy74@gmail.com
  */
-class SqliteQueryBuilderTest extends \PHPUnit\Framework\TestCase
+class SqliteQueryBuilderTest extends TestCase
 {
 
     private static $pdo;
@@ -173,11 +174,9 @@ class SqliteQueryBuilderTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testParameterRaiseExceptionWhenUnsupportedType()
     {
+        $this->expectException(\InvalidArgumentException::class);
         $builder = new SqliteQueryBuilder(
             new SqliteExpressionBuilder(),
             new SqliteParameterBuilder(new PdoDriver($this->getPdo(), new SqliteMetaDataProcessor()))
@@ -305,11 +304,9 @@ class SqliteQueryBuilderTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testExpressionRaiseExceptionWhenUnsupportedType()
     {
+        $this->expectException(\InvalidArgumentException::class);
         $builder = new SqliteQueryBuilder(
             new SqliteExpressionBuilder(),
             new SqliteParameterBuilder(new PdoDriver($this->getPdo(), new SqliteMetaDataProcessor()))

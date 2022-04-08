@@ -13,17 +13,17 @@ use Volcanus\QueryBuilder\ExpressionBuilderInterface;
 class ExpressionBuilder implements ExpressionBuilderInterface
 {
 
-    public function resultColumn($expr, $alias = null)
+    public function resultColumn(string $expr, string $alias = null): string
     {
         return (isset($alias)) ? $expr . ' AS "' . $alias . '"' : $expr;
     }
 
-    public function asDate($name)
+    public function asDate(string $name): string
     {
         return sprintf("TO_CHAR(%s, 'YYYY-MM-DD')", $name);
     }
 
-    public function asTimestamp($name)
+    public function asTimestamp(string $name): string
     {
         return sprintf("TO_CHAR(%s, 'YYYY-MM-DD HH24:MI:SS')", $name);
     }

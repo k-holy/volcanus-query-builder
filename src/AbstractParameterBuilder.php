@@ -8,8 +8,6 @@
 
 namespace Volcanus\QueryBuilder;
 
-use Volcanus\QueryBuilder\ParameterBuilderInterface;
-
 /**
  * パラメータビルダ抽象クラス
  *
@@ -24,7 +22,7 @@ abstract class AbstractParameterBuilder implements ParameterBuilderInterface
      * @param int|float|string $value 値
      * @return string 変換結果
      */
-    public function toInt1($value)
+    public function toInt1($value): string
     {
         if (!isset($value)) {
             return 'NULL';
@@ -53,7 +51,7 @@ abstract class AbstractParameterBuilder implements ParameterBuilderInterface
      * @param int|float|string $value 値
      * @return string 変換結果
      */
-    public function toInt2($value)
+    public function toInt2($value): string
     {
         if (!isset($value)) {
             return 'NULL';
@@ -82,7 +80,7 @@ abstract class AbstractParameterBuilder implements ParameterBuilderInterface
      * @param int|float|string $value 値
      * @return string 変換結果
      */
-    public function toInt3($value)
+    public function toInt3($value): string
     {
         if (!isset($value)) {
             return 'NULL';
@@ -111,7 +109,7 @@ abstract class AbstractParameterBuilder implements ParameterBuilderInterface
      * @param int|float|string $value 値
      * @return string 変換結果
      */
-    public function toInt4($value)
+    public function toInt4($value): string
     {
         if (!isset($value)) {
             return 'NULL';
@@ -140,7 +138,7 @@ abstract class AbstractParameterBuilder implements ParameterBuilderInterface
      * @param int|float|string $value 値
      * @return string 変換結果
      */
-    public function toInt8($value)
+    public function toInt8($value): string
     {
         if (!isset($value)) {
             return 'NULL';

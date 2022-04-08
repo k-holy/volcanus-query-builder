@@ -8,6 +8,7 @@
 
 namespace Volcanus\QueryBuilder\Test\Adapter\Sqlite;
 
+use PHPUnit\Framework\TestCase;
 use Volcanus\QueryBuilder\Adapter\Sqlite\SqliteExpressionBuilder;
 
 /**
@@ -15,7 +16,7 @@ use Volcanus\QueryBuilder\Adapter\Sqlite\SqliteExpressionBuilder;
  *
  * @author k.holy74@gmail.com
  */
-class SqliteExpressionBuilderTest extends \PHPUnit\Framework\TestCase
+class SqliteExpressionBuilderTest extends TestCase
 {
 
     public function testResultColumn()

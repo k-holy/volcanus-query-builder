@@ -23,14 +23,14 @@ class SqliteParameterBuilder extends AbstractParameterBuilder implements Paramet
 {
 
     /**
-     * @var \Volcanus\Database\Driver\DriverInterface
+     * @var DriverInterface
      */
     private $driver;
 
     /**
      * コンストラクタ
      *
-     * @param \Volcanus\Database\Driver\DriverInterface
+     * @param DriverInterface $driver
      */
     public function __construct(DriverInterface $driver)
     {
@@ -43,7 +43,7 @@ class SqliteParameterBuilder extends AbstractParameterBuilder implements Paramet
      * @param string $value 値
      * @return string 変換結果
      */
-    public function toText($value)
+    public function toText($value): string
     {
         if (!isset($value)) {
             return 'NULL';
@@ -58,10 +58,10 @@ class SqliteParameterBuilder extends AbstractParameterBuilder implements Paramet
      * 値を数値を表すSQLパラメータ値に変換します。
      *
      * @param int|float|string $value 値
-     * @param string $type 型名 ($typesフィールド参照)
+     * @param string|null $type 型名 ($typesフィールド参照)
      * @return string 変換結果
      */
-    public function toInt($value, $type = null)
+    public function toInt($value, string $type = null): string
     {
         if (isset($type)) {
             if ($type === 'smallint' || $type === 'int2') {
@@ -77,10 +77,10 @@ class SqliteParameterBuilder extends AbstractParameterBuilder implements Paramet
      * 値を浮動小数点数を表すSQLパラメータ値に変換します。
      *
      * @param int|float|string $value 値
-     * @param string $type 型名 ($typesフィールド参照)
+     * @param string|null $type 型名 ($typesフィールド参照)
      * @return string 変換結果
      */
-    public function toFloat($value, $type = null)
+    public function toFloat($value, string $type = null): string
     {
         if (!isset($value)) {
             return 'NULL';
@@ -109,7 +109,7 @@ class SqliteParameterBuilder extends AbstractParameterBuilder implements Paramet
      * @param string|int $value 値
      * @return string 変換結果
      */
-    public function toBool($value)
+    public function toBool($value): string
     {
         if (!isset($value)) {
             return 'NULL';
@@ -125,7 +125,7 @@ class SqliteParameterBuilder extends AbstractParameterBuilder implements Paramet
                 return 'NULL';
             }
         }
-        return sprintf('%d', (bool)$value ? 1 : 0);
+        return sprintf('%d', $value ? 1 : 0);
     }
 
     /**
@@ -134,7 +134,7 @@ class SqliteParameterBuilder extends AbstractParameterBuilder implements Paramet
      * @param int|\DateTime|string|array $value 値
      * @return string 変換結果
      */
-    public function toDate($value)
+    public function toDate($value): string
     {
         if (!isset($value)) {
             return 'NULL';
@@ -204,7 +204,7 @@ class SqliteParameterBuilder extends AbstractParameterBuilder implements Paramet
      * @param int|\DateTime|string|array $value 値
      * @return string 変換結果
      */
-    public function toTimestamp($value)
+    public function toTimestamp($value): string
     {
         if (!isset($value)) {
             return 'NULL';

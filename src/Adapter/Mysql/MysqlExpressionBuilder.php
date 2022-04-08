@@ -37,10 +37,10 @@ class MysqlExpressionBuilder implements ExpressionBuilderInterface
      * 項目名/式により値を取得するSQL句を生成します。
      *
      * @param string $expr 項目名/式
-     * @param string $alias 別名
+     * @param string|null $alias 別名
      * @return string 値を取得するSQL句
      */
-    public function resultColumn($expr, $alias = null)
+    public function resultColumn(string $expr, string $alias = null): string
     {
         return (is_string($alias) && strlen($alias) >= 1) ? $expr . ' AS `' . $alias . '`' : $expr;
     }
@@ -51,7 +51,7 @@ class MysqlExpressionBuilder implements ExpressionBuilderInterface
      * @param string $name 項目名
      * @return string 値を取得するSQL句
      */
-    public function asDate($name)
+    public function asDate(string $name): string
     {
         $format = '%Y' . self::$dateDelimiter
             . '%m' . self::$dateDelimiter
@@ -65,7 +65,7 @@ class MysqlExpressionBuilder implements ExpressionBuilderInterface
      * @param string $name 項目名
      * @return string 値を取得するSQL句
      */
-    public function asTimestamp($name)
+    public function asTimestamp(string $name): string
     {
         $format = '%Y' . self::$dateDelimiter
             . '%m' . self::$dateDelimiter
@@ -82,7 +82,7 @@ class MysqlExpressionBuilder implements ExpressionBuilderInterface
      * @param string $name 項目名
      * @return string 値を取得するSQL句
      */
-    public function asGeometry($name)
+    public function asGeometry(string $name): string
     {
         return sprintf('ASTEXT(%s)', $name);
     }
