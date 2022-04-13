@@ -3,7 +3,7 @@
   "homepage": "https://github.com/k-holy/volcanus-query-builder",
   "type": "library",
   "description": "SQL builder for volcanus-database",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "license": "MIT",
   "authors": [
     {
@@ -18,7 +18,7 @@
   },
   "require": {
     "php": ">=7.3||>=8.0.2",
-    "volcanus/database": "^2.0"
+    "volcanus/database": "^2.1"
   },
   "require-dev": {
     "phpunit/phpunit": "^9.5",
