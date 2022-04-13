@@ -25,6 +25,18 @@ class MysqlExpressionBuilderTest extends TestCase
         $this->assertEquals('name AS `alias`', $builder->resultColumn('name', 'alias'));
     }
 
+    public function testResultColumnWithoutAlias()
+    {
+        $builder = new MysqlExpressionBuilder();
+        $this->assertEquals('name', $builder->resultColumn('name'));
+    }
+
+    public function testResultColumnWithNullAlias()
+    {
+        $builder = new MysqlExpressionBuilder();
+        $this->assertEquals('name', $builder->resultColumn('name', null));
+    }
+
     public function testAsDate()
     {
         $builder = new MysqlExpressionBuilder();

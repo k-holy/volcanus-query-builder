@@ -198,6 +198,18 @@ class MysqlQueryBuilderTest extends TestCase
         );
     }
 
+    public function testLimitOffsetWithNullOffset()
+    {
+        $builder = new MysqlQueryBuilder(
+            new MysqlExpressionBuilder(),
+            new MysqlParameterBuilder(new PdoDriver($this->getPdo(), new MysqlMetaDataProcessor()))
+        );
+        $this->assertEquals(
+            'SELECT * FROM test LIMIT 20',
+            $builder->limitOffset('SELECT * FROM test', 20, null)
+        );
+    }
+
     public function testLimitOffsetWithoutLimit()
     {
         $builder = new MysqlQueryBuilder(

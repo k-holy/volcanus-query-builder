@@ -62,7 +62,7 @@ class Facade
      * @param string|null $alias 別名
      * @return string SQL句
      */
-    public function expression(string $expr, string $type = null, string $alias = null): string
+    public function expression(string $expr, ?string $type = null, ?string $alias = null): string
     {
         return $this->builder->expression($expr, $type, $alias);
     }
@@ -76,7 +76,7 @@ class Facade
      * @param array|null $columnAliases 別名取得設定 (キー=列名、値=別名)
      * @return array SQL SELECT句となる列指定の配列
      */
-    public function expressions(string $tableName, string $tableAlias = null, ?array $excludeKeys = [], ?array $columnAliases = []): array
+    public function expressions(string $tableName, ?string $tableAlias = null, ?array $excludeKeys = [], ?array $columnAliases = []): array
     {
         $metaColumns = $this->driver->getMetaColumns($tableName);
         $expressions = [];
@@ -88,7 +88,7 @@ class Facade
             $expressions[$column->name] = $this->expression(
                 isset($tableAlias) ? $tableAlias . '.' . $column->name : $tableName . '.' . $column->name,
                 $column->type,
-                array_key_exists($columnName, $columnAliases) ? $columnAliases[$columnName] : $columnName
+                is_array($columnAliases) && array_key_exists($columnName, $columnAliases) ? $columnAliases[$columnName] : $columnName
             );
         }
         return $expressions;
@@ -165,7 +165,7 @@ SQL;
      * @param string|null $where WHERE句
      * @return string SQL
      */
-    public function update(string $tableName, array $columns, string $where = null): string
+    public function update(string $tableName, array $columns, ?string $where = null): string
     {
         $parameters = $this->parameters($tableName, $columns);
         $updateColumnSet = [];
@@ -191,7 +191,7 @@ SQL;
      * @param string|null $where WHERE句
      * @return string SQL
      */
-    public function delete(string $tableName, string $where = null): string
+    public function delete(string $tableName, ?string $where = null): string
     {
         $sql = <<<SQL
 DELETE FROM
@@ -211,7 +211,7 @@ SQL;
      * @param array|null $columnAliases 別名取得設定 (キー=列名、値=別名)
      * @return string SQL
      */
-    public function selectSyntax(string $tableName, string $tableAlias = null, ?array $excludeKeys = [], ?array $columnAliases = []): string
+    public function selectSyntax(string $tableName, ?string $tableAlias = null, ?array $excludeKeys = [], ?array $columnAliases = []): string
     {
         $expressions = $this->expressions($tableName, $tableAlias, $excludeKeys, $columnAliases);
         return (count($expressions) >= 1) ? "SELECT\n" . join(",\n", $expressions) : '';
@@ -224,7 +224,7 @@ SQL;
      * @param string|null $tableAlias テーブル別名
      * @return string SQL FROM節
      */
-    public function fromSyntax(string $tableName, string $tableAlias = null): string
+    public function fromSyntax(string $tableName, ?string $tableAlias = null): string
     {
         return (isset($tableAlias)) ? "FROM\n{$tableName} {$tableAlias}" : "FROM\n{$tableName}";
     }
@@ -239,7 +239,7 @@ SQL;
      * @param array|null $columnAliases 別名取得設定 (キー=列名、値=別名)
      * @return string SQL
      */
-    public function select(string $tableName, string $tableAlias = null, string $where = null, ?array $excludeKeys = [], ?array $columnAliases = []): string
+    public function select(string $tableName, ?string $tableAlias = null, ?string $where = null, ?array $excludeKeys = [], ?array $columnAliases = []): string
     {
         $sql = join("\n", [
             $this->selectSyntax($tableName, $tableAlias, $excludeKeys, $columnAliases),
@@ -269,7 +269,7 @@ SQL;
      * @param int|null $offset 取得開始行index
      * @return string SQL
      */
-    public function limitOffset(string $sql, int $limit = null, int $offset = null): string
+    public function limitOffset(string $sql, ?int $limit = null, ?int $offset = null): string
     {
         return $this->builder->limitOffset($sql, $limit, $offset);
     }
@@ -279,11 +279,14 @@ SQL;
      *
      * @param string $tableName テーブル名
      * @param string|null $tableAlias テーブル別名
-     * @param array $columns 抽出条件を格納した配列(キー=列名、値=列値)
+     * @param array|null $columns 抽出条件を格納した配列(キー=列名、値=列値)
      * @return array SQL WHERE句となる抽出条件の配列
      */
-    public function whereExpressions(string $tableName, string $tableAlias = null, array $columns = []): array
+    public function whereExpressions(string $tableName, ?string $tableAlias = null, ?array $columns = []): array
     {
+        if (empty($columns)) {
+            return [];
+        }
         $metaColumns = $this->driver->getMetaColumns($tableName);
         $expressions = [];
         foreach ($columns as $key => $value) {
@@ -353,11 +356,14 @@ SQL;
      *
      * @param string|null $tableName テーブル名
      * @param string|null $tableAlias テーブル別名
-     * @param array $orders 整列順を格納した配列(キー=順序、値=列名 + 昇順/降順)
+     * @param array|null $orders 整列順を格納した配列(キー=順序、値=列名 + 昇順/降順)
      * @return array SQL ORDER BY句となる列名の配列
      */
-    public function orderByExpressions(string $tableName = null, string $tableAlias = null, array $orders = []): array
+    public function orderByExpressions(string $tableName = null, ?string $tableAlias = null, ?array $orders = []): array
     {
+        if (empty($orders)) {
+            return [];
+        }
         $metaColumns = ($tableName !== null) ? $this->driver->getMetaColumns($tableName) : [];
         $expressions = [];
         foreach ($orders as $order) {
@@ -388,11 +394,11 @@ SQL;
      *
      * @param string $tableName テーブル名
      * @param string|null $tableAlias テーブル別名
-     * @param array $excludeKeys 除外列を格納した配列(値=列名)
-     * @param array $appendKeys 追加列を格納した配列(値=列名)
+     * @param array|null $excludeKeys 除外列を格納した配列(値=列名)
+     * @param array|null $appendKeys 追加列を格納した配列(値=列名)
      * @return array SQL GROUP BY句となる列名の配列
      */
-    public function groupByExpressions(string $tableName, string $tableAlias = null, array $excludeKeys = [], array $appendKeys = []): array
+    public function groupByExpressions(string $tableName, ?string $tableAlias = null, ?array $excludeKeys = [], ?array $appendKeys = []): array
     {
         $metaColumns = $this->driver->getMetaColumns($tableName);
         $expressions = [];
@@ -403,7 +409,10 @@ SQL;
             }
             $expressions[$column->name] = (isset($tableAlias)) ? $tableAlias . '.' . $column->name : $tableName . '.' . $column->name;
         }
-        return array_merge($expressions, $appendKeys);
+        if (!empty($appendKeys)) {
+            $expressions = array_merge($expressions, $appendKeys);
+        }
+        return $expressions;
     }
 
     /**
@@ -411,10 +420,10 @@ SQL;
      *
      * @param string $tableName テーブル名
      * @param string|null $tableAlias テーブル別名
-     * @param array $columns 抽出条件を格納した配列(キー=列名、値=列値)
+     * @param array|null $columns 抽出条件を格納した配列(キー=列名、値=列値)
      * @return string
      */
-    public function whereSyntax(string $tableName, string $tableAlias = null, array $columns = []): string
+    public function whereSyntax(string $tableName, ?string $tableAlias = null, ?array $columns = []): string
     {
         $expressions = $this->whereExpressions($tableName, $tableAlias, $columns);
         $where = (count($expressions) > 0) ? join(" AND\n", $expressions) : '';
@@ -426,10 +435,10 @@ SQL;
      *
      * @param string $tableName テーブル名
      * @param string|null $tableAlias テーブル別名
-     * @param array $orders 整列順を格納した配列(キー=順序、値=列名 + 昇順/降順)
+     * @param array|null $orders 整列順を格納した配列(キー=順序、値=列名 + 昇順/降順)
      * @return string
      */
-    public function orderBySyntax(string $tableName, string $tableAlias = null, array $orders = []): string
+    public function orderBySyntax(string $tableName, ?string $tableAlias = null, ?array $orders = []): string
     {
         $expressions = $this->orderByExpressions($tableName, $tableAlias, $orders);
         $orderBy = (count($expressions) > 0) ? join(" ,\n", $expressions) : '';
@@ -441,11 +450,11 @@ SQL;
      *
      * @param string $tableName テーブル名
      * @param string|null $tableAlias テーブル別名
-     * @param array $excludeKeys 除外列を格納した配列(値=列名)
-     * @param array $appendKeys 追加列を格納した配列(値=列名)
+     * @param array|null $excludeKeys 除外列を格納した配列(値=列名)
+     * @param array|null $appendKeys 追加列を格納した配列(値=列名)
      * @return string
      */
-    public function groupBySyntax(string $tableName, string $tableAlias = null, array $excludeKeys = [], array $appendKeys = []): string
+    public function groupBySyntax(string $tableName, ?string $tableAlias = null, ?array $excludeKeys = [], ?array $appendKeys = []): string
     {
         $expressions = $this->groupByExpressions($tableName, $tableAlias, $excludeKeys, $appendKeys);
         $groupBy = (count($expressions) > 0) ? join(" ,\n", $expressions) : '';

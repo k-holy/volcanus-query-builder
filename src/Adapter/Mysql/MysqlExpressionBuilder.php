@@ -40,7 +40,7 @@ class MysqlExpressionBuilder implements ExpressionBuilderInterface
      * @param string|null $alias 別名
      * @return string 値を取得するSQL句
      */
-    public function resultColumn(string $expr, string $alias = null): string
+    public function resultColumn(string $expr, ?string $alias = null): string
     {
         return (is_string($alias) && strlen($alias) >= 1) ? $expr . ' AS `' . $alias . '`' : $expr;
     }
