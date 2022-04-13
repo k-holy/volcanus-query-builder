@@ -61,7 +61,7 @@ class SqliteParameterBuilder extends AbstractParameterBuilder implements Paramet
      * @param string|null $type 型名 ($typesフィールド参照)
      * @return string 変換結果
      */
-    public function toInt($value, string $type = null): string
+    public function toInt($value, ?string $type = null): string
     {
         if (isset($type)) {
             if ($type === 'smallint' || $type === 'int2') {
@@ -80,7 +80,7 @@ class SqliteParameterBuilder extends AbstractParameterBuilder implements Paramet
      * @param string|null $type 型名 ($typesフィールド参照)
      * @return string 変換結果
      */
-    public function toFloat($value, string $type = null): string
+    public function toFloat($value, ?string $type = null): string
     {
         if (!isset($value)) {
             return 'NULL';

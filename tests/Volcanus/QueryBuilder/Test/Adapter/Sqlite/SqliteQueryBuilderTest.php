@@ -208,6 +208,18 @@ class SqliteQueryBuilderTest extends TestCase
         );
     }
 
+    public function testLimitOffsetWithNullOffset()
+    {
+        $builder = new SqliteQueryBuilder(
+            new SqliteExpressionBuilder(),
+            new SqliteParameterBuilder(new PdoDriver($this->getPdo(), new SqliteMetaDataProcessor()))
+        );
+        $this->assertEquals(
+            'SELECT * FROM test LIMIT 20',
+            $builder->limitOffset('SELECT * FROM test', 20, null)
+        );
+    }
+
     public function testLimitOffsetWithoutLimit()
     {
         $builder = new SqliteQueryBuilder(

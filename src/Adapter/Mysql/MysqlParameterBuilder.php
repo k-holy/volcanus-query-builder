@@ -76,7 +76,7 @@ class MysqlParameterBuilder extends AbstractParameterBuilder implements Paramete
      * @param string|null $type 型名 ($typesフィールド参照)
      * @return string 変換結果
      */
-    public function toInt($value, string $type = null): string
+    public function toInt($value, ?string $type = null): string
     {
         if (isset($type)) {
             if ($type === 'tinyint') {
@@ -99,7 +99,7 @@ class MysqlParameterBuilder extends AbstractParameterBuilder implements Paramete
      * @param string|null $type 型名 ($typesフィールド参照)
      * @return string 変換結果
      */
-    public function toFloat($value, string $type = null): string
+    public function toFloat($value, ?string $type = null): string
     {
         if (!isset($value)) {
             return 'NULL';

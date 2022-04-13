@@ -31,7 +31,7 @@ interface ParameterBuilderInterface
      * @param string|null $type 型名 ($typesフィールド参照)
      * @return string 変換結果
      */
-    public function toInt($value, string $type = null): string;
+    public function toInt($value, ?string $type = null): string;
 
     /**
      * 値を浮動小数点数を表すSQLパラメータ値に変換します。
@@ -40,7 +40,7 @@ interface ParameterBuilderInterface
      * @param string|null $type 型名 ($typesフィールド参照)
      * @return string 変換結果
      */
-    public function toFloat($value, string $type = null): string;
+    public function toFloat($value, ?string $type = null): string;
 
     /**
      * 値を真偽値を表すSQLパラメータ値に変換します。

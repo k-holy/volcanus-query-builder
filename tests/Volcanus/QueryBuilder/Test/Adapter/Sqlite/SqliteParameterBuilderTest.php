@@ -98,6 +98,14 @@ class SqliteParameterBuilderTest extends TestCase
         $this->assertEquals('NULL', $builder->toInt(''));
     }
 
+    public function testToIntWithNullType()
+    {
+        $builder = new SqliteParameterBuilder(
+            new PdoDriver($this->getPdo(), new SqliteMetaDataProcessor())
+        );
+        $this->assertEquals('1', $builder->toInt(1, null));
+    }
+
     public function testToSmallInt()
     {
         $builder = new SqliteParameterBuilder(
@@ -226,6 +234,14 @@ class SqliteParameterBuilderTest extends TestCase
             new PdoDriver($this->getPdo(), new SqliteMetaDataProcessor())
         );
         $this->assertEquals('NULL', $builder->toFloat(''));
+    }
+
+    public function testToFloatWithNullType()
+    {
+        $builder = new SqliteParameterBuilder(
+            new PdoDriver($this->getPdo(), new SqliteMetaDataProcessor())
+        );
+        $this->assertEquals('1', $builder->toFloat(1, null));
     }
 
     public function testToDateString()

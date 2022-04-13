@@ -84,6 +84,30 @@ SQL
         $this->assertEquals("strftime('%Y-%m-%d %H:%i:%s', test.updated_at) AS \"updated_at_formatted\"", $facade->expression('test.updated_at', 'datetime', "updated_at_formatted"));
     }
 
+    public function testExpressionWithoutType()
+    {
+        $facade = new Facade($this->getDriver(), $this->getBuilder());
+        $this->assertEquals('test.id AS "id"', $facade->expression('test.id', null, "id"));
+        $this->assertEquals('test.name AS "name"', $facade->expression('test.name', null, "name"));
+        $this->assertEquals("test.updated_at AS \"updated_at_formatted\"", $facade->expression('test.updated_at', null, "updated_at_formatted"));
+    }
+
+    public function testExpressionWithoutAlias()
+    {
+        $facade = new Facade($this->getDriver(), $this->getBuilder());
+        $this->assertEquals('test.id', $facade->expression('test.id', 'int'));
+        $this->assertEquals('test.name', $facade->expression('test.name', 'text'));
+        $this->assertEquals("strftime('%Y-%m-%d %H:%i:%s', test.updated_at) AS \"test.updated_at\"", $facade->expression('test.updated_at', 'datetime'));
+    }
+
+    public function testExpressionWithNullAlias()
+    {
+        $facade = new Facade($this->getDriver(), $this->getBuilder());
+        $this->assertEquals('test.id', $facade->expression('test.id', 'int', null));
+        $this->assertEquals('test.name', $facade->expression('test.name', 'text', null));
+        $this->assertEquals("strftime('%Y-%m-%d %H:%i:%s', test.updated_at) AS \"test.updated_at\"", $facade->expression('test.updated_at', 'datetime', null));
+    }
+
     public function testExpressions()
     {
         $facade = new Facade($this->getDriver(), $this->getBuilder());
@@ -166,6 +190,16 @@ SQL
         $this->assertEquals('users.user_name AS "userName"', $expressions['user_name']);
         $this->assertEquals("strftime('%Y-%m-%d %H:%i:%s', users.updated_at) AS \"updatedAtFormatted\"", $expressions['updated_at']);
         $this->assertEquals('users.this_column_name_is_very_long AS "thisColumnNameIsVeryLong"', $expressions['this_column_name_is_very_long']);
+    }
+
+    public function testExpressionsWithNullTableAliasAndNullExcludeKeysAndNullColumnAliases()
+    {
+        $this->createTableForEnableCamelize();
+        $facade = new Facade($this->getDriver(), $this->getBuilder());
+        $expressions = $facade->expressions('test', null, null, null);
+        $this->assertEquals('test.id AS "id"', $expressions['id']);
+        $this->assertEquals('test.name AS "name"', $expressions['name']);
+        $this->assertEquals("strftime('%Y-%m-%d %H:%i:%s', test.updated_at) AS \"updated_at\"", $expressions['updated_at']);
     }
 
     public function testParameter()
@@ -269,6 +303,26 @@ SQL
         );
     }
 
+    public function testUpdateWithNullWhere()
+    {
+        $facade = new Facade($this->getDriver(), $this->getBuilder());
+        $columns = [
+            'id' => '1',
+            'name' => 'Foo',
+            'updated_at' => new \DateTime('2013-10-01 00:00:00'),
+        ];
+        $this->assertEquals(<<<SQL
+UPDATE
+test
+SET
+id = 1,
+name = 'Foo',
+updated_at = datetime('2013-10-01 00:00:00')
+SQL
+            , $facade->update('test', $columns, null)
+        );
+    }
+
     public function testDelete()
     {
         $facade = new Facade($this->getDriver(), $this->getBuilder());
@@ -293,6 +347,17 @@ SQL
         );
     }
 
+    public function testDeleteWithNullWhere()
+    {
+        $facade = new Facade($this->getDriver(), $this->getBuilder());
+        $this->assertEquals(<<<SQL
+DELETE FROM
+test
+SQL
+            , $facade->delete('test', null)
+        );
+    }
+
     public function testSelectSyntax()
     {
         $facade = new Facade($this->getDriver(), $this->getBuilder());
@@ -306,6 +371,70 @@ SQL
         );
     }
 
+    public function testSelectSyntaxWithTableAlias()
+    {
+        $facade = new Facade($this->getDriver(), $this->getBuilder());
+        $this->assertEquals(<<<SQL
+SELECT
+t01.id AS "id",
+t01.name AS "name",
+strftime('%Y-%m-%d %H:%i:%s', t01.updated_at) AS "updated_at"
+SQL
+            , $facade->selectSyntax('test', 't01')
+        );
+    }
+
+    public function testSelectSyntaxWithNullTableAlias()
+    {
+        $facade = new Facade($this->getDriver(), $this->getBuilder());
+        $this->assertEquals(<<<SQL
+SELECT
+test.id AS "id",
+test.name AS "name",
+strftime('%Y-%m-%d %H:%i:%s', test.updated_at) AS "updated_at"
+SQL
+            , $facade->selectSyntax('test', null)
+        );
+    }
+
+    public function testSelectSyntaxWithExcludeKeys()
+    {
+        $facade = new Facade($this->getDriver(), $this->getBuilder());
+        $this->assertEquals(<<<SQL
+SELECT
+test.id AS "id",
+test.name AS "name"
+SQL
+            , $facade->selectSyntax('test', null, ['updated_at'])
+        );
+    }
+
+    public function testSelectSyntaxWithColumnAliases()
+    {
+        $facade = new Facade($this->getDriver(), $this->getBuilder());
+        $this->assertEquals(<<<SQL
+SELECT
+test.id AS "id",
+test.name AS "name",
+strftime('%Y-%m-%d %H:%i:%s', test.updated_at) AS "updated_at_formatted"
+SQL
+            , $facade->selectSyntax('test', null, null, ['updated_at' => 'updated_at_formatted'])
+        );
+    }
+
+    public function testSelectSyntaxWithNullTableAliasAndNullExcludeKeysAndNullColumnAliases()
+    {
+        $facade = new Facade($this->getDriver(), $this->getBuilder());
+        $this->assertEquals(<<<SQL
+SELECT
+test.id AS "id",
+test.name AS "name",
+strftime('%Y-%m-%d %H:%i:%s', test.updated_at) AS "updated_at"
+SQL
+            , $facade->selectSyntax('test', null, null, null)
+        );
+    }
+
     public function testFromSyntax()
     {
         $facade = new Facade($this->getDriver(), $this->getBuilder());
@@ -314,6 +443,28 @@ FROM
 test
 SQL
             , $facade->fromSyntax('test')
+        );
+    }
+
+    public function testFromSyntaxWithTableAlias()
+    {
+        $facade = new Facade($this->getDriver(), $this->getBuilder());
+        $this->assertEquals(<<<SQL
+FROM
+test t01
+SQL
+            , $facade->fromSyntax('test', 't01')
+        );
+    }
+
+    public function testFromSyntaxWithNullTableAlias()
+    {
+        $facade = new Facade($this->getDriver(), $this->getBuilder());
+        $this->assertEquals(<<<SQL
+FROM
+test
+SQL
+            , $facade->fromSyntax('test', null)
         );
     }
 
@@ -393,6 +544,21 @@ SQL
         );
     }
 
+    public function testSelectWithNullTableAliasAndNullWhereAndNullExcludeKeysAndNullColumnAliases()
+    {
+        $facade = new Facade($this->getDriver(), $this->getBuilder());
+        $this->assertEquals(<<<SQL
+SELECT
+test.id AS "id",
+test.name AS "name",
+strftime('%Y-%m-%d %H:%i:%s', test.updated_at) AS "updated_at"
+FROM
+test
+SQL
+            , $facade->select('test', null, null, null, null)
+        );
+    }
+
     public function testSelectEnableCamelize()
     {
         $this->createTableForEnableCamelize();
@@ -416,6 +582,22 @@ SQL
         $facade = new Facade($this->getDriver(), $this->getBuilder());
         $this->assertEquals("SELECT * FROM test LIMIT 10 OFFSET 1",
             $facade->limitOffset("SELECT * FROM test", 10, 1)
+        );
+    }
+
+    public function testLimitOffsetWithNullLimit()
+    {
+        $facade = new Facade($this->getDriver(), $this->getBuilder());
+        $this->assertEquals("SELECT * FROM test LIMIT 18446744073709551615 OFFSET 1",
+            $facade->limitOffset("SELECT * FROM test", null, 1)
+        );
+    }
+
+    public function testLimitOffsetWithNullOffset()
+    {
+        $facade = new Facade($this->getDriver(), $this->getBuilder());
+        $this->assertEquals("SELECT * FROM test LIMIT 10",
+            $facade->limitOffset("SELECT * FROM test", 10, null)
         );
     }
 
@@ -735,6 +917,13 @@ SQL
         $this->assertEquals('us1.user_id = (SELECT user_id FROM users WHERE 1=1)', $expressions[0]);
     }
 
+    public function testWhereExpressionsWithNullColumns()
+    {
+        $facade = new Facade($this->getDriver(), $this->getBuilder());
+        $expressions = $facade->whereExpressions('test', null, null);
+        $this->assertEmpty($expressions);
+    }
+
     public function testOrderByExpressions()
     {
         $facade = new Facade($this->getDriver(), $this->getBuilder());
@@ -875,12 +1064,91 @@ SQL
 
     public function testOrderByExpressionsAsDateEnableCamelize()
     {
+        $this->createTableForEnableCamelize();
         $facade = new Facade($this->getDriver(), $this->getBuilder());
         $facade->enableCamelize(true);
         $orders = ['updatedAt DESC', 'userId DESC'];
         $expressions = $facade->orderByExpressions('users', null, $orders);
         $this->assertEquals("strftime('%Y-%m-%d %H:%i:%s', users.updated_at) DESC", $expressions[0]);
         $this->assertEquals('users.user_id DESC', $expressions[1]);
+    }
+
+    public function testOrderByExpressionsWithNullOrders()
+    {
+        $facade = new Facade($this->getDriver(), $this->getBuilder());
+        $expressions = $facade->orderByExpressions('users', null, null);
+        $this->assertEmpty($expressions);
+    }
+
+    public function testGroupByExpressions()
+    {
+        $facade = new Facade($this->getDriver(), $this->getBuilder());
+        $expressions = $facade->groupByExpressions('test');
+        $this->assertEquals('test.id', $expressions['id']);
+        $this->assertEquals('test.name', $expressions['name']);
+        $this->assertEquals('test.updated_at', $expressions['updated_at']);
+    }
+
+    public function testGroupByExpressionsWithTableAlias()
+    {
+        $facade = new Facade($this->getDriver(), $this->getBuilder());
+        $expressions = $facade->groupByExpressions('test', 't01');
+        $this->assertEquals('t01.id', $expressions['id']);
+        $this->assertEquals('t01.name', $expressions['name']);
+        $this->assertEquals('t01.updated_at', $expressions['updated_at']);
+    }
+
+    public function testGroupByExpressionsWithExcludeKeys()
+    {
+        $facade = new Facade($this->getDriver(), $this->getBuilder());
+        $expressions = $facade->groupByExpressions('test', null, ['updated_at']);
+        $this->assertArrayHasKey('id', $expressions);
+        $this->assertArrayHasKey('name', $expressions);
+        $this->assertArrayNotHasKey('updated_at', $expressions);
+    }
+
+    public function testGroupByExpressionsWithExcludeKeysEnableCamelize()
+    {
+        $this->createTableForEnableCamelize();
+        $facade = new Facade($this->getDriver(), $this->getBuilder());
+        $facade->enableCamelize(true);
+        $expressions = $facade->groupByExpressions('users', null, ['updatedAt', 'thisColumnNameIsVeryLong']);
+        $this->assertArrayHasKey('user_id', $expressions);
+        $this->assertArrayHasKey('user_name', $expressions);
+        $this->assertArrayNotHasKey('updated_at', $expressions);
+        $this->assertArrayNotHasKey('this_column_name_is_very_long', $expressions);
+    }
+
+    public function testGroupByExpressionsWithAppendKeys()
+    {
+        $facade = new Facade($this->getDriver(), $this->getBuilder());
+        $expressions = $facade->groupByExpressions('test', null, null, ['append_key' => 'test2.append_key']);
+        $this->assertEquals('test.id', $expressions['id']);
+        $this->assertEquals('test.name', $expressions['name']);
+        $this->assertEquals('test.updated_at', $expressions['updated_at']);
+        $this->assertEquals('test2.append_key', $expressions['append_key']);
+    }
+
+    public function testGroupByExpressionsWithAppendKeysEnableCamelize()
+    {
+        $this->createTableForEnableCamelize();
+        $facade = new Facade($this->getDriver(), $this->getBuilder());
+        $facade->enableCamelize(true);
+        $expressions = $facade->groupByExpressions('users', null, ['updatedAt', 'thisColumnNameIsVeryLong'], ['append_key' => 'test2.append_key']);
+        $this->assertEquals('users.user_id', $expressions['user_id']);
+        $this->assertEquals('users.user_name', $expressions['user_name']);
+        $this->assertEquals('test2.append_key', $expressions['append_key']);
+        $this->assertArrayNotHasKey('updated_at', $expressions);
+        $this->assertArrayNotHasKey('this_column_name_is_very_long', $expressions);
+    }
+
+    public function testGroupByExpressionsWithNullAppendKeys()
+    {
+        $facade = new Facade($this->getDriver(), $this->getBuilder());
+        $expressions = $facade->groupByExpressions('test', null, null, null);
+        $this->assertEquals('test.id', $expressions['id']);
+        $this->assertEquals('test.name', $expressions['name']);
+        $this->assertEquals('test.updated_at', $expressions['updated_at']);
     }
 
     public function testEscapeLikePattern()

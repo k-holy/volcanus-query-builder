@@ -98,6 +98,14 @@ class MysqlParameterBuilderTest extends TestCase
         $this->assertEquals('NULL', $builder->toInt(''));
     }
 
+    public function testToIntWithNullType()
+    {
+        $builder = new MysqlParameterBuilder(
+            new PdoDriver($this->getPdo(), new MysqlMetaDataProcessor())
+        );
+        $this->assertEquals('1', $builder->toInt(1, null));
+    }
+
     public function testToTinyInt()
     {
         $builder = new MysqlParameterBuilder(
@@ -296,6 +304,14 @@ class MysqlParameterBuilderTest extends TestCase
             new PdoDriver($this->getPdo(), new MysqlMetaDataProcessor())
         );
         $this->assertEquals('NULL', $builder->toFloat(''));
+    }
+
+    public function testToFloatWithNullType()
+    {
+        $builder = new MysqlParameterBuilder(
+            new PdoDriver($this->getPdo(), new MysqlMetaDataProcessor())
+        );
+        $this->assertEquals('1', $builder->toFloat(1, null));
     }
 
     public function testToDateString()
