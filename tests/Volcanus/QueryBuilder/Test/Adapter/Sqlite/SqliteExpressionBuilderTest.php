@@ -25,6 +25,18 @@ class SqliteExpressionBuilderTest extends TestCase
         $this->assertEquals('name AS "alias"', $builder->resultColumn('name', 'alias'));
     }
 
+    public function testResultColumnWithoutAlias()
+    {
+        $builder = new SqliteExpressionBuilder();
+        $this->assertEquals('name', $builder->resultColumn('name'));
+    }
+
+    public function testResultColumnWithNullAlias()
+    {
+        $builder = new SqliteExpressionBuilder();
+        $this->assertEquals('name', $builder->resultColumn('name', null));
+    }
+
     public function testAsDate()
     {
         $builder = new SqliteExpressionBuilder();

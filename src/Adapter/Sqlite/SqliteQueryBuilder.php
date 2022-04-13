@@ -70,7 +70,7 @@ class SqliteQueryBuilder extends AbstractQueryBuilder implements QueryBuilderInt
      * @param int|null $offset 取得開始行index
      * @return string SQL
      */
-    public function limitOffset(string $sql, int $limit = null, int $offset = null): string
+    public function limitOffset(string $sql, ?int $limit = null, ?int $offset = null): string
     {
         $sql .= sprintf(' LIMIT %s',
             (isset($limit) && $limit >= 0)

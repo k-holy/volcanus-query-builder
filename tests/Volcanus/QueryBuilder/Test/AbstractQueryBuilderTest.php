@@ -201,6 +201,18 @@ class AbstractQueryBuilderTest extends TestCase
         );
     }
 
+    public function testExpressionAsTextWithNullAlias()
+    {
+        $builder = new QueryBuilder(
+            new ExpressionBuilder(),
+            new ParameterBuilder()
+        );
+        $this->assertEquals(
+            'name',
+            $builder->expression('name', 'text', null)
+        );
+    }
+
     public function testExpressionAsDate()
     {
         $builder = new QueryBuilder(
@@ -222,6 +234,18 @@ class AbstractQueryBuilderTest extends TestCase
         $this->assertEquals(
             "TO_CHAR(birthday, 'YYYY-MM-DD') AS \"birthday_formatted\"",
             $builder->expression('birthday', 'date', 'birthday_formatted')
+        );
+    }
+
+    public function testExpressionAsDateWithNullAlias()
+    {
+        $builder = new QueryBuilder(
+            new ExpressionBuilder(),
+            new ParameterBuilder()
+        );
+        $this->assertEquals(
+            "TO_CHAR(birthday, 'YYYY-MM-DD') AS \"birthday\"",
+            $builder->expression('birthday', 'date', null)
         );
     }
 
@@ -257,6 +281,22 @@ class AbstractQueryBuilderTest extends TestCase
         );
     }
 
+    public function testExpressionAsTimestampWithNullAlias()
+    {
+        $builder = new QueryBuilder(
+            new ExpressionBuilder(),
+            new ParameterBuilder()
+        );
+        $this->assertEquals(
+            "TO_CHAR(birthday, 'YYYY-MM-DD HH24:MI:SS') AS \"birthday\"",
+            $builder->expression('birthday', 'timestamp', null)
+        );
+        $this->assertEquals(
+            "TO_CHAR(birthday, 'YYYY-MM-DD HH24:MI:SS') AS \"birthday\"",
+            $builder->expression('birthday', 'datetime', null)
+        );
+    }
+
     public function testExpressionRaiseExceptionWhenUnsupportedType()
     {
         $this->expectException(\InvalidArgumentException::class);
@@ -265,6 +305,30 @@ class AbstractQueryBuilderTest extends TestCase
             new ParameterBuilder()
         );
         $builder->expression('name', 'unsupported-type');
+    }
+
+    public function testExpressionWithoutType()
+    {
+        $builder = new QueryBuilder(
+            new ExpressionBuilder(),
+            new ParameterBuilder()
+        );
+        $this->assertEquals(
+            'name',
+            $builder->expression('name')
+        );
+    }
+
+    public function testExpressionWithNullType()
+    {
+        $builder = new QueryBuilder(
+            new ExpressionBuilder(),
+            new ParameterBuilder()
+        );
+        $this->assertEquals(
+            'name',
+            $builder->expression('name', null)
+        );
     }
 
     public function testEscapeLikePattern()

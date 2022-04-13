@@ -96,7 +96,7 @@ abstract class AbstractQueryBuilder implements QueryBuilderInterface
      * @param string|null $alias 別名
      * @return string SQL句
      */
-    public function expression(string $expr, string $type = null, string $alias = null): string
+    public function expression(string $expr, ?string $type = null, ?string $alias = null): string
     {
         if (isset($type)) {
             $sqlType = $this->parameterType($type);
