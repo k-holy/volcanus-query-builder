@@ -1,6 +1,6 @@
 <?php
 /**
- * Volcanus libraries for PHP
+ * Volcanus libraries for PHP 8.1~
  *
  * @copyright k-holy <k.holy74@gmail.com>
  * @license The MIT License (MIT)
@@ -25,22 +25,22 @@ class MysqlParameterBuilder extends AbstractParameterBuilder implements Paramete
     /**
      * @var string 日付区切符（年月日）
      */
-    private static $dateDelimiter = '-';
+    private static string $dateDelimiter = '-';
 
     /**
      * @var string 日付区切符（時分秒）
      */
-    private static $timeDelimiter = ':';
+    private static string $timeDelimiter = ':';
 
     /**
      * @var string 日付区切符（年月日と時分秒）
      */
-    private static $dateTimeDelimiter = ' ';
+    private static string $dateTimeDelimiter = ' ';
 
     /**
      * @var DriverInterface
      */
-    protected $driver;
+    protected DriverInterface $driver;
 
     /**
      * コンストラクタ
@@ -58,7 +58,7 @@ class MysqlParameterBuilder extends AbstractParameterBuilder implements Paramete
      * @param mixed $value 値
      * @return string 変換結果
      */
-    public function toText($value): string
+    public function toText(mixed $value): string
     {
         if (!isset($value)) {
             return 'NULL';
@@ -76,7 +76,7 @@ class MysqlParameterBuilder extends AbstractParameterBuilder implements Paramete
      * @param string|null $type 型名 ($typesフィールド参照)
      * @return string 変換結果
      */
-    public function toInt($value, ?string $type = null): string
+    public function toInt(mixed $value, string $type = null): string
     {
         if (isset($type)) {
             if ($type === 'tinyint') {
@@ -99,7 +99,7 @@ class MysqlParameterBuilder extends AbstractParameterBuilder implements Paramete
      * @param string|null $type 型名 ($typesフィールド参照)
      * @return string 変換結果
      */
-    public function toFloat($value, ?string $type = null): string
+    public function toFloat(mixed $value, string $type = null): string
     {
         if (!isset($value)) {
             return 'NULL';
@@ -128,7 +128,7 @@ class MysqlParameterBuilder extends AbstractParameterBuilder implements Paramete
      * @param mixed $value 値
      * @return string 変換結果
      */
-    public function toBool($value): string
+    public function toBool(mixed $value): string
     {
         if (!isset($value)) {
             return 'NULL';
@@ -153,7 +153,7 @@ class MysqlParameterBuilder extends AbstractParameterBuilder implements Paramete
      * @param int|\DateTime|string|array $value 値
      * @return string 変換結果
      */
-    public function toDate($value): string
+    public function toDate(mixed $value): string
     {
         if (!isset($value)) {
             return 'NULL';
@@ -239,7 +239,7 @@ class MysqlParameterBuilder extends AbstractParameterBuilder implements Paramete
      * @param int|\DateTime|string|array $value 値
      * @return string 変換結果
      */
-    public function toTimestamp($value): string
+    public function toTimestamp(mixed $value): string
     {
         if (!isset($value)) {
             return 'NULL';
@@ -347,7 +347,7 @@ class MysqlParameterBuilder extends AbstractParameterBuilder implements Paramete
      * @param int|\DateTime|string|array $value 値
      * @return string 変換結果
      */
-    public function toTime($value): string
+    public function toTime(mixed $value): string
     {
         if (!isset($value)) {
             return 'NULL';
@@ -411,7 +411,7 @@ class MysqlParameterBuilder extends AbstractParameterBuilder implements Paramete
      * @param string|array $value 値
      * @return string 変換結果
      */
-    public function toGeometry($value): string
+    public function toGeometry(mixed $value): string
     {
         if (!isset($value)) {
             return 'NULL';
@@ -446,7 +446,7 @@ class MysqlParameterBuilder extends AbstractParameterBuilder implements Paramete
      * @param int|float|string $value 値
      * @return string 変換結果
      */
-    public function toTinyInt($value): string
+    public function toTinyInt(mixed $value): string
     {
         return parent::toInt1($value);
     }
@@ -457,7 +457,7 @@ class MysqlParameterBuilder extends AbstractParameterBuilder implements Paramete
      * @param int|float|string $value 値
      * @return string 変換結果
      */
-    public function toSmallInt($value): string
+    public function toSmallInt(mixed $value): string
     {
         return parent::toInt2($value);
     }
@@ -468,7 +468,7 @@ class MysqlParameterBuilder extends AbstractParameterBuilder implements Paramete
      * @param int|float|string $value 値
      * @return string 変換結果
      */
-    public function toMediumInt($value): string
+    public function toMediumInt(mixed $value): string
     {
         return parent::toInt3($value);
     }
@@ -479,7 +479,7 @@ class MysqlParameterBuilder extends AbstractParameterBuilder implements Paramete
      * @param int|float|string $value 値
      * @return string 変換結果
      */
-    public function toBigInt($value): string
+    public function toBigInt(mixed $value): string
     {
         return parent::toInt8($value);
     }

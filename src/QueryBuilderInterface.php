@@ -1,6 +1,6 @@
 <?php
 /**
- * Volcanus libraries for PHP
+ * Volcanus libraries for PHP 8.1~
  *
  * @copyright k-holy <k.holy74@gmail.com>
  * @license The MIT License (MIT)
@@ -23,7 +23,7 @@ interface QueryBuilderInterface
      * @param string $type 型名 ($typesフィールド参照)
      * @return string 変換結果
      */
-    public function parameter($value, string $type): string;
+    public function parameter(mixed $value, string $type): string;
 
     /**
      * SELECT文にLIMIT値およびOFFSET値を付与して返します。
@@ -33,7 +33,7 @@ interface QueryBuilderInterface
      * @param int|null $offset 取得開始行index
      * @return string SQL
      */
-    public function limitOffset(string $sql, ?int $limit = null, ?int $offset = null): string;
+    public function limitOffset(string $sql, int $limit = null, int $offset = null): string;
 
     /**
      * SELECT文を元に件数を返すクエリを生成して返します。
@@ -51,7 +51,7 @@ interface QueryBuilderInterface
      * @param string|null $alias 別名
      * @return string SQL句
      */
-    public function expression(string $expr, ?string $type = null, ?string $alias = null): string;
+    public function expression(string $expr, string $type = null, string $alias = null): string;
 
     /**
      * Like演算子のパターンとして使用する文字列をエスケープして返します。

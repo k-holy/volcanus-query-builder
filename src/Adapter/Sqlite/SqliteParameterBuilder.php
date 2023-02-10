@@ -1,6 +1,6 @@
 <?php
 /**
- * Volcanus libraries for PHP
+ * Volcanus libraries for PHP 8.1~
  *
  * @copyright k-holy <k.holy74@gmail.com>
  * @license The MIT License (MIT)
@@ -25,7 +25,7 @@ class SqliteParameterBuilder extends AbstractParameterBuilder implements Paramet
     /**
      * @var DriverInterface
      */
-    private $driver;
+    private DriverInterface $driver;
 
     /**
      * コンストラクタ
@@ -43,7 +43,7 @@ class SqliteParameterBuilder extends AbstractParameterBuilder implements Paramet
      * @param string $value 値
      * @return string 変換結果
      */
-    public function toText($value): string
+    public function toText(mixed $value): string
     {
         if (!isset($value)) {
             return 'NULL';
@@ -61,7 +61,7 @@ class SqliteParameterBuilder extends AbstractParameterBuilder implements Paramet
      * @param string|null $type 型名 ($typesフィールド参照)
      * @return string 変換結果
      */
-    public function toInt($value, ?string $type = null): string
+    public function toInt(mixed $value, string $type = null): string
     {
         if (isset($type)) {
             if ($type === 'smallint' || $type === 'int2') {
@@ -80,7 +80,7 @@ class SqliteParameterBuilder extends AbstractParameterBuilder implements Paramet
      * @param string|null $type 型名 ($typesフィールド参照)
      * @return string 変換結果
      */
-    public function toFloat($value, ?string $type = null): string
+    public function toFloat(mixed $value, string $type = null): string
     {
         if (!isset($value)) {
             return 'NULL';
@@ -109,7 +109,7 @@ class SqliteParameterBuilder extends AbstractParameterBuilder implements Paramet
      * @param string|int $value 値
      * @return string 変換結果
      */
-    public function toBool($value): string
+    public function toBool(mixed $value): string
     {
         if (!isset($value)) {
             return 'NULL';
@@ -134,7 +134,7 @@ class SqliteParameterBuilder extends AbstractParameterBuilder implements Paramet
      * @param int|\DateTime|string|array $value 値
      * @return string 変換結果
      */
-    public function toDate($value): string
+    public function toDate(mixed $value): string
     {
         if (!isset($value)) {
             return 'NULL';
@@ -204,7 +204,7 @@ class SqliteParameterBuilder extends AbstractParameterBuilder implements Paramet
      * @param int|\DateTime|string|array $value 値
      * @return string 変換結果
      */
-    public function toTimestamp($value): string
+    public function toTimestamp(mixed $value): string
     {
         if (!isset($value)) {
             return 'NULL';

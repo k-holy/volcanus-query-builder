@@ -1,6 +1,6 @@
 <?php
 /**
- * Volcanus libraries for PHP
+ * Volcanus libraries for PHP 8.1~
  *
  * @copyright k-holy <k.holy74@gmail.com>
  * @license The MIT License (MIT)
@@ -15,7 +15,7 @@ use Volcanus\QueryBuilder\ParameterBuilderInterface;
 
 class QueryBuilder extends AbstractQueryBuilder implements QueryBuilderInterface
 {
-    protected static $types = [
+    protected static array $types = [
         'text' => ['char', 'varchar', 'text'],
         'int' => ['int', 'integer'],
         'float' => ['float', 'real'],

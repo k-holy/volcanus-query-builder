@@ -1,6 +1,6 @@
 <?php
 /**
- * Volcanus libraries for PHP
+ * Volcanus libraries for PHP 8.1~
  *
  * @copyright k-holy <k.holy74@gmail.com>
  * @license The MIT License (MIT)
@@ -14,32 +14,32 @@ use Volcanus\QueryBuilder\AbstractParameterBuilder;
 class ParameterBuilder extends AbstractParameterBuilder implements ParameterBuilderInterface
 {
 
-    public function toText($value): string
+    public function toText(mixed $value): string
     {
         return sprintf("'%s'", $value);
     }
 
-    public function toInt($value, string $type = null): string
+    public function toInt(mixed $value, string $type = null): string
     {
         return sprintf('%d', $value);
     }
 
-    public function toFloat($value, string $type = null): string
+    public function toFloat(mixed $value, string $type = null): string
     {
         return (string)$value;
     }
 
-    public function toBool($value): string
+    public function toBool(mixed $value): string
     {
         return ((bool)$value === true) ? '1' : '0';
     }
 
-    public function toDate($value): string
+    public function toDate(mixed $value): string
     {
         return sprintf("TO_DATE('%s')", $value);
     }
 
-    public function toTimestamp($value): string
+    public function toTimestamp(mixed $value): string
     {
         return sprintf("TO_TIMESTAMP('%s')", $value);
     }

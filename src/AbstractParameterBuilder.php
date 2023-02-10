@@ -1,6 +1,6 @@
 <?php
 /**
- * Volcanus libraries for PHP
+ * Volcanus libraries for PHP 8.1~
  *
  * @copyright k-holy <k.holy74@gmail.com>
  * @license The MIT License (MIT)
@@ -22,7 +22,7 @@ abstract class AbstractParameterBuilder implements ParameterBuilderInterface
      * @param int|float|string $value 値
      * @return string 変換結果
      */
-    public function toInt1($value): string
+    public function toInt1(mixed $value): string
     {
         if (!isset($value)) {
             return 'NULL';
@@ -51,7 +51,7 @@ abstract class AbstractParameterBuilder implements ParameterBuilderInterface
      * @param int|float|string $value 値
      * @return string 変換結果
      */
-    public function toInt2($value): string
+    public function toInt2(mixed $value): string
     {
         if (!isset($value)) {
             return 'NULL';
@@ -80,7 +80,7 @@ abstract class AbstractParameterBuilder implements ParameterBuilderInterface
      * @param int|float|string $value 値
      * @return string 変換結果
      */
-    public function toInt3($value): string
+    public function toInt3(mixed $value): string
     {
         if (!isset($value)) {
             return 'NULL';
@@ -109,7 +109,7 @@ abstract class AbstractParameterBuilder implements ParameterBuilderInterface
      * @param int|float|string $value 値
      * @return string 変換結果
      */
-    public function toInt4($value): string
+    public function toInt4(mixed $value): string
     {
         if (!isset($value)) {
             return 'NULL';
@@ -138,7 +138,7 @@ abstract class AbstractParameterBuilder implements ParameterBuilderInterface
      * @param int|float|string $value 値
      * @return string 変換結果
      */
-    public function toInt8($value): string
+    public function toInt8(mixed $value): string
     {
         if (!isset($value)) {
             return 'NULL';
