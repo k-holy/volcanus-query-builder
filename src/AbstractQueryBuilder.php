@@ -1,6 +1,6 @@
 <?php
 /**
- * Volcanus libraries for PHP
+ * Volcanus libraries for PHP 8.1~
  *
  * @copyright k-holy <k.holy74@gmail.com>
  * @license The MIT License (MIT)
@@ -19,20 +19,20 @@ abstract class AbstractQueryBuilder implements QueryBuilderInterface
     /**
      * @var ExpressionBuilderInterface
      */
-    protected $expressionBuilder;
+    protected ExpressionBuilderInterface $expressionBuilder;
 
     /**
      * @var ParameterBuilderInterface
      */
-    protected $parameterBuilder;
+    protected ParameterBuilderInterface $parameterBuilder;
 
     /**
      * @var array サポートするデータ型名
      */
-    protected static $types = [];
+    protected static array $types = [];
 
     /**
-     * @param ExpressionBuilderInterface
+     * @param ExpressionBuilderInterface $expressionBuilder
      */
     protected function setExpressionBuilder(ExpressionBuilderInterface $expressionBuilder)
     {
@@ -40,7 +40,7 @@ abstract class AbstractQueryBuilder implements QueryBuilderInterface
     }
 
     /**
-     * @param ParameterBuilderInterface
+     * @param ParameterBuilderInterface $parameterBuilder
      */
     protected function setParameterBuilder(ParameterBuilderInterface $parameterBuilder)
     {
@@ -51,9 +51,9 @@ abstract class AbstractQueryBuilder implements QueryBuilderInterface
      * 型名から、SQLパラメータ用の型名を返します。
      *
      * @param string $type 型名 ($typesフィールド参照)
-     * @return string SQLパラメータ用の型名
+     * @return bool|string SQLパラメータ用の型名|false
      */
-    public function parameterType(string $type)
+    public function parameterType(string $type): bool|string
     {
         $type = strtolower($type);
         foreach (static::$types as $parameterType => $parameterTypes) {
@@ -71,7 +71,7 @@ abstract class AbstractQueryBuilder implements QueryBuilderInterface
      * @param string $type 型名 ($typesフィールド参照)
      * @return string 変換結果
      */
-    public function parameter($value, string $type): string
+    public function parameter(mixed $value, string $type): string
     {
         $sqlType = $this->parameterType($type);
         if (!$sqlType) {
@@ -96,7 +96,7 @@ abstract class AbstractQueryBuilder implements QueryBuilderInterface
      * @param string|null $alias 別名
      * @return string SQL句
      */
-    public function expression(string $expr, ?string $type = null, ?string $alias = null): string
+    public function expression(string $expr, string $type = null, string $alias = null): string
     {
         if (isset($type)) {
             $sqlType = $this->parameterType($type);

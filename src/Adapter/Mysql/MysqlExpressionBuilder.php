@@ -1,6 +1,6 @@
 <?php
 /**
- * Volcanus libraries for PHP
+ * Volcanus libraries for PHP 8.1~
  *
  * @copyright k-holy <k.holy74@gmail.com>
  * @license The MIT License (MIT)
@@ -21,17 +21,17 @@ class MysqlExpressionBuilder implements ExpressionBuilderInterface
     /**
      * @var string 日付区切符（年月日）
      */
-    private static $dateDelimiter = '-';
+    private static string $dateDelimiter = '-';
 
     /**
      * @var string 日付区切符（時分秒）
      */
-    private static $timeDelimiter = ':';
+    private static string $timeDelimiter = ':';
 
     /**
      * @var string 日付区切符（年月日と時分秒）
      */
-    private static $dateTimeDelimiter = ' ';
+    private static string $dateTimeDelimiter = ' ';
 
     /**
      * 項目名/式により値を取得するSQL句を生成します。
@@ -40,7 +40,7 @@ class MysqlExpressionBuilder implements ExpressionBuilderInterface
      * @param string|null $alias 別名
      * @return string 値を取得するSQL句
      */
-    public function resultColumn(string $expr, ?string $alias = null): string
+    public function resultColumn(string $expr, string $alias = null): string
     {
         return (is_string($alias) && strlen($alias) >= 1) ? $expr . ' AS `' . $alias . '`' : $expr;
     }

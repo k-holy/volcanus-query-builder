@@ -1,6 +1,6 @@
 <?php
 /**
- * Volcanus libraries for PHP
+ * Volcanus libraries for PHP 8.1~
  *
  * @copyright k-holy <k.holy74@gmail.com>
  * @license The MIT License (MIT)
@@ -24,9 +24,9 @@ use Volcanus\Database\MetaData\SqliteMetaDataProcessor;
 class SqliteQueryBuilderTest extends TestCase
 {
 
-    private static $pdo;
+    private static \PDO $pdo;
 
-    public function getPdo()
+    private function getPdo(): \PDO
     {
         if (!isset(static::$pdo)) {
             static::$pdo = new \PDO('sqlite::memory:');
