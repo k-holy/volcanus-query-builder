@@ -148,7 +148,7 @@ class SqliteParameterBuilder extends AbstractParameterBuilder implements Paramet
 
         // DateTime
         // SQLiteの日付関数は固定書式
-        if ($value instanceof \DateTime) {
+        if ($value instanceof \DateTimeInterface) {
             return sprintf("date('%s')", $value->format('Y-m-d'));
         }
 
@@ -218,7 +218,7 @@ class SqliteParameterBuilder extends AbstractParameterBuilder implements Paramet
 
         // DateTime
         // SQLiteの日付関数は固定書式
-        if ($value instanceof \DateTime) {
+        if ($value instanceof \DateTimeInterface) {
             return sprintf("datetime('%s')", $value->format('Y-m-d H:i:s'));
         }
 

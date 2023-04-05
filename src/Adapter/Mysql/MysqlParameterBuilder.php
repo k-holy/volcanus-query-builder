@@ -170,7 +170,7 @@ class MysqlParameterBuilder extends AbstractParameterBuilder implements Paramete
         }
 
         // DateTime
-        if ($value instanceof \DateTime) {
+        if ($value instanceof \DateTimeInterface) {
             return sprintf("STR_TO_DATE('%s', '%s')",
                 $value->format(sprintf('Y%sm%sd',
                     self::$dateDelimiter,
@@ -258,7 +258,7 @@ class MysqlParameterBuilder extends AbstractParameterBuilder implements Paramete
             $value->setTimezone(new \DateTimeZone(date_default_timezone_get()));
         }
 
-        if ($value instanceof \DateTime) {
+        if ($value instanceof \DateTimeInterface) {
             return sprintf("STR_TO_DATE('%s', '%s')",
                 $value->format(sprintf('Y%sm%sd%sH%si%ss',
                     self::$dateDelimiter,
@@ -360,7 +360,7 @@ class MysqlParameterBuilder extends AbstractParameterBuilder implements Paramete
         }
 
         // DateTime
-        if ($value instanceof \DateTime) {
+        if ($value instanceof \DateTimeInterface) {
             return sprintf("'%s'", $value->format(sprintf('H%si%ss',
                 self::$timeDelimiter,
                 self::$timeDelimiter

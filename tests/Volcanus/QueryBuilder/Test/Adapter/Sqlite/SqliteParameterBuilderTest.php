@@ -285,6 +285,14 @@ class SqliteParameterBuilderTest extends TestCase
         $this->assertEquals("date('2013-01-02')", $builder->ToDate(new \DateTime('2013-01-02')));
     }
 
+    public function testToDateForDateTimeImmutable()
+    {
+        $builder = new SqliteParameterBuilder(
+            new PdoDriver($this->getPdo(), new SqliteMetaDataProcessor())
+        );
+        $this->assertEquals("date('2013-01-02')", $builder->ToDate(new \DateTimeImmutable('2013-01-02')));
+    }
+
     public function testToDateForUnixTimestamp()
     {
         $builder = new SqliteParameterBuilder(
@@ -395,6 +403,14 @@ class SqliteParameterBuilderTest extends TestCase
             new PdoDriver($this->getPdo(), new SqliteMetaDataProcessor())
         );
         $this->assertEquals("datetime('2013-01-02 03:04:05')", $builder->toTimestamp(new \DateTime('2013-01-02 03:04:05')));
+    }
+
+    public function testToTimestampForDateTimeImmutable()
+    {
+        $builder = new SqliteParameterBuilder(
+            new PdoDriver($this->getPdo(), new SqliteMetaDataProcessor())
+        );
+        $this->assertEquals("datetime('2013-01-02 03:04:05')", $builder->toTimestamp(new \DateTimeImmutable('2013-01-02 03:04:05')));
     }
 
     public function testToTimestampForUnixTimestamp()
