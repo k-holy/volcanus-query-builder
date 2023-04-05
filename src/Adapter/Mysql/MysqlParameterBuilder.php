@@ -150,7 +150,7 @@ class MysqlParameterBuilder extends AbstractParameterBuilder implements Paramete
     /**
      * 値を日付を表すSQLパラメータ値に変換します。
      *
-     * @param int|\DateTime|string|array $value 値
+     * @param int|\DateTimeInterface|string|array $value 値
      * @return string 変換結果
      */
     public function toDate(mixed $value): string
@@ -236,7 +236,7 @@ class MysqlParameterBuilder extends AbstractParameterBuilder implements Paramete
     /**
      * 値を日時を表すSQLパラメータ値に変換します。
      *
-     * @param int|\DateTime|string|array $value 値
+     * @param int|\DateTimeInterface|string|array $value 値
      * @return string 変換結果
      */
     public function toTimestamp(mixed $value): string
@@ -344,7 +344,7 @@ class MysqlParameterBuilder extends AbstractParameterBuilder implements Paramete
     /**
      * 値を時刻を表すSQLパラメータ値に変換します。
      *
-     * @param int|\DateTime|string|array $value 値
+     * @param int|\DateTimeInterface|string|array $value 値
      * @return string 変換結果
      */
     public function toTime(mixed $value): string
