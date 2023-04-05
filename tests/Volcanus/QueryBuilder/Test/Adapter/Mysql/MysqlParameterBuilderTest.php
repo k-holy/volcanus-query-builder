@@ -363,6 +363,14 @@ class MysqlParameterBuilderTest extends TestCase
         $this->assertEquals("STR_TO_DATE('2013-01-02', '%Y-%m-%d')", $builder->ToDate(new \DateTime('2013-01-02')));
     }
 
+    public function testToDateForDateTimeImmutable()
+    {
+        $builder = new MysqlParameterBuilder(
+            new PdoDriver($this->getPdo(), new MysqlMetaDataProcessor())
+        );
+        $this->assertEquals("STR_TO_DATE('2013-01-02', '%Y-%m-%d')", $builder->ToDate(new \DateTimeImmutable('2013-01-02')));
+    }
+
     public function testToDateForUnixTimestamp()
     {
         $builder = new MysqlParameterBuilder(
@@ -490,6 +498,14 @@ class MysqlParameterBuilderTest extends TestCase
         $this->assertEquals("STR_TO_DATE('2013-01-02 03:04:05', '%Y-%m-%d %H:%i:%s')", $builder->toTimestamp(new \DateTime('2013-01-02 03:04:05')));
     }
 
+    public function testToTimestampForDateTimeImmutable()
+    {
+        $builder = new MysqlParameterBuilder(
+            new PdoDriver($this->getPdo(), new MysqlMetaDataProcessor())
+        );
+        $this->assertEquals("STR_TO_DATE('2013-01-02 03:04:05', '%Y-%m-%d %H:%i:%s')", $builder->toTimestamp(new \DateTimeImmutable('2013-01-02 03:04:05')));
+    }
+
     public function testToTimestampForUnixTimestamp()
     {
         $builder = new MysqlParameterBuilder(
@@ -594,6 +610,14 @@ class MysqlParameterBuilderTest extends TestCase
             new PdoDriver($this->getPdo(), new MysqlMetaDataProcessor())
         );
         $this->assertEquals("'03:04:05'", $builder->toTime(new \DateTime('2013-01-02 03:04:05')));
+    }
+
+    public function testToTimeForDateTimeImmutable()
+    {
+        $builder = new MysqlParameterBuilder(
+            new PdoDriver($this->getPdo(), new MysqlMetaDataProcessor())
+        );
+        $this->assertEquals("'03:04:05'", $builder->toTime(new \DateTimeImmutable('2013-01-02 03:04:05')));
     }
 
     public function testToTimeForUnixTimestamp()
