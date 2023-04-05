@@ -131,7 +131,7 @@ class SqliteParameterBuilder extends AbstractParameterBuilder implements Paramet
     /**
      * 値を日付を表すSQLパラメータ値に変換します。
      *
-     * @param int|\DateTime|string|array $value 値
+     * @param int|\DateTimeInterface|string|array $value 値
      * @return string 変換結果
      */
     public function toDate(mixed $value): string
@@ -201,7 +201,7 @@ class SqliteParameterBuilder extends AbstractParameterBuilder implements Paramet
     /**
      * 値を日時を表すSQLパラメータ値に変換します。
      *
-     * @param int|\DateTime|string|array $value 値
+     * @param int|\DateTimeInterface|string|array $value 値
      * @return string 変換結果
      */
     public function toTimestamp(mixed $value): string
