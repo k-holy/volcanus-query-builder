@@ -52,7 +52,7 @@ class MysqlExpressionBuilderTest extends TestCase
     public function testAsGeometry()
     {
         $builder = new MysqlExpressionBuilder();
-        $this->assertEquals("ASTEXT(name)", $builder->asGeometry('name'));
+        $this->assertEquals("ST_AsText(name)", $builder->asGeometry('name'));
     }
 
 }

@@ -84,7 +84,7 @@ class MysqlExpressionBuilder implements ExpressionBuilderInterface
      */
     public function asGeometry(string $name): string
     {
-        return sprintf('ASTEXT(%s)', $name);
+        return sprintf('ST_AsText(%s)', $name);
     }
 
 }

@@ -430,7 +430,7 @@ class MysqlParameterBuilder extends AbstractParameterBuilder implements Paramete
             if (!isset($value[0]) || !isset($value[1])) {
                 return 'NULL';
             }
-            return sprintf("GeomFromText('POINT(%s %s)')", $value[0], $value[1]);
+            return sprintf("ST_GeomFromText('POINT(%s %s)')", $value[0], $value[1]);
         }
 
         throw new \InvalidArgumentException(
