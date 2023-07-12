@@ -725,7 +725,7 @@ class MysqlParameterBuilderTest extends TestCase
         $builder = new MysqlParameterBuilder(
             new PdoDriver($this->getPdo(), new MysqlMetaDataProcessor())
         );
-        $this->assertEquals("GeomFromText('POINT(139.744858 35.675888)')", $builder->toGeometry('139.744858 35.675888'));
+        $this->assertEquals("ST_GeomFromText('POINT(139.744858 35.675888)')", $builder->toGeometry('139.744858 35.675888'));
     }
 
     public function testToGeometryFromArrayOfString()
@@ -733,7 +733,7 @@ class MysqlParameterBuilderTest extends TestCase
         $builder = new MysqlParameterBuilder(
             new PdoDriver($this->getPdo(), new MysqlMetaDataProcessor())
         );
-        $this->assertEquals("GeomFromText('POINT(139.744858 35.675888)')", $builder->toGeometry([
+        $this->assertEquals("ST_GeomFromText('POINT(139.744858 35.675888)')", $builder->toGeometry([
             '139.744858',
             '35.675888',
         ]));
@@ -744,7 +744,7 @@ class MysqlParameterBuilderTest extends TestCase
         $builder = new MysqlParameterBuilder(
             new PdoDriver($this->getPdo(), new MysqlMetaDataProcessor())
         );
-        $this->assertEquals("GeomFromText('POINT(139.744858 35.675888)')", $builder->toGeometry([
+        $this->assertEquals("ST_GeomFromText('POINT(139.744858 35.675888)')", $builder->toGeometry([
             139.744858,
             35.675888,
         ]));
