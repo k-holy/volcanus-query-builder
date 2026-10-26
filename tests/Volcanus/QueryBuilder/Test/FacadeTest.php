@@ -62,7 +62,7 @@ SQL
         );
     }
 
-    private function createTableForEnableCamelize()
+    private function createTableForEnableCamelize(): void
     {
         $pdo = $this->getPdo();
         $pdo->exec(<<<SQL

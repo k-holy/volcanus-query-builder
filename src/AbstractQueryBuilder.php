@@ -34,7 +34,7 @@ abstract class AbstractQueryBuilder implements QueryBuilderInterface
     /**
      * @param ExpressionBuilderInterface $expressionBuilder
      */
-    protected function setExpressionBuilder(ExpressionBuilderInterface $expressionBuilder)
+    protected function setExpressionBuilder(ExpressionBuilderInterface $expressionBuilder): void
     {
         $this->expressionBuilder = $expressionBuilder;
     }
@@ -42,7 +42,7 @@ abstract class AbstractQueryBuilder implements QueryBuilderInterface
     /**
      * @param ParameterBuilderInterface $parameterBuilder
      */
-    protected function setParameterBuilder(ParameterBuilderInterface $parameterBuilder)
+    protected function setParameterBuilder(ParameterBuilderInterface $parameterBuilder): void
     {
         $this->parameterBuilder = $parameterBuilder;
     }
@@ -96,7 +96,7 @@ abstract class AbstractQueryBuilder implements QueryBuilderInterface
      * @param string|null $alias 別名
      * @return string SQL句
      */
-    public function expression(string $expr, string $type = null, string $alias = null): string
+    public function expression(string $expr, ?string $type = null, ?string $alias = null): string
     {
         if (isset($type)) {
             $sqlType = $this->parameterType($type);

@@ -23,7 +23,7 @@ interface ExpressionBuilderInterface
      * @param string|null $alias 別名
      * @return string 値を取得するSQL句
      */
-    public function resultColumn(string $expr, string $alias = null): string;
+    public function resultColumn(string $expr, ?string $alias = null): string;
 
     /**
      * 日付型の項目を書式化して取得するSQL句を生成します。

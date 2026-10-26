@@ -63,7 +63,7 @@ class Facade
      * @param string|null $alias 別名
      * @return string SQL句
      */
-    public function expression(string $expr, string $type = null, string $alias = null): string
+    public function expression(string $expr, ?string $type = null, ?string $alias = null): string
     {
         return $this->builder->expression($expr, $type, $alias);
     }
@@ -77,7 +77,7 @@ class Facade
      * @param array|null $columnAliases 別名取得設定 (キー=列名、値=別名)
      * @return array SQL SELECT句となる列指定の配列
      */
-    public function expressions(string $tableName, string $tableAlias = null, ?array $excludeKeys = [], ?array $columnAliases = []): array
+    public function expressions(string $tableName, ?string $tableAlias = null, ?array $excludeKeys = [], ?array $columnAliases = []): array
     {
         $metaColumns = $this->driver->getMetaColumns($tableName);
         $expressions = [];
@@ -240,7 +240,7 @@ SQL;
      * @param array|null $columnAliases 別名取得設定 (キー=列名、値=別名)
      * @return string SQL
      */
-    public function select(string $tableName, string $tableAlias = null, string $where = null, ?array $excludeKeys = [], ?array $columnAliases = []): string
+    public function select(string $tableName, ?string $tableAlias = null, ?string $where = null, ?array $excludeKeys = [], ?array $columnAliases = []): string
     {
         $sql = join("\n", [
             $this->selectSyntax($tableName, $tableAlias, $excludeKeys, $columnAliases),
@@ -270,7 +270,7 @@ SQL;
      * @param int|null $offset 取得開始行index
      * @return string SQL
      */
-    public function limitOffset(string $sql, int $limit = null, int $offset = null): string
+    public function limitOffset(string $sql, ?int $limit = null, ?int $offset = null): string
     {
         return $this->builder->limitOffset($sql, $limit, $offset);
     }
@@ -283,7 +283,7 @@ SQL;
      * @param array|null $columns 抽出条件を格納した配列(キー=列名、値=列値)
      * @return array SQL WHERE句となる抽出条件の配列
      */
-    public function whereExpressions(string $tableName, string $tableAlias = null, ?array $columns = []): array
+    public function whereExpressions(string $tableName, ?string $tableAlias = null, ?array $columns = []): array
     {
         if (empty($columns)) {
             return [];
@@ -360,7 +360,7 @@ SQL;
      * @param array|null $orders 整列順を格納した配列(キー=順序、値=列名 + 昇順/降順)
      * @return array SQL ORDER BY句となる列名の配列
      */
-    public function orderByExpressions(string $tableName = null, string $tableAlias = null, ?array $orders = []): array
+    public function orderByExpressions(?string $tableName = null, ?string $tableAlias = null, ?array $orders = []): array
     {
         if (empty($orders)) {
             return [];
@@ -399,7 +399,7 @@ SQL;
      * @param array|null $appendKeys 追加列を格納した配列(値=列名)
      * @return array SQL GROUP BY句となる列名の配列
      */
-    public function groupByExpressions(string $tableName, string $tableAlias = null, ?array $excludeKeys = [], ?array $appendKeys = []): array
+    public function groupByExpressions(string $tableName, ?string $tableAlias = null, ?array $excludeKeys = [], ?array $appendKeys = []): array
     {
         $metaColumns = $this->driver->getMetaColumns($tableName);
         $expressions = [];
@@ -424,7 +424,7 @@ SQL;
      * @param array|null $columns 抽出条件を格納した配列(キー=列名、値=列値)
      * @return string
      */
-    public function whereSyntax(string $tableName, string $tableAlias = null, ?array $columns = []): string
+    public function whereSyntax(string $tableName, ?string $tableAlias = null, ?array $columns = []): string
     {
         $expressions = $this->whereExpressions($tableName, $tableAlias, $columns);
         $where = (count($expressions) > 0) ? join(" AND\n", $expressions) : '';
@@ -439,7 +439,7 @@ SQL;
      * @param array|null $orders 整列順を格納した配列(キー=順序、値=列名 + 昇順/降順)
      * @return string
      */
-    public function orderBySyntax(string $tableName, string $tableAlias = null, ?array $orders = []): string
+    public function orderBySyntax(string $tableName, ?string $tableAlias = null, ?array $orders = []): string
     {
         $expressions = $this->orderByExpressions($tableName, $tableAlias, $orders);
         $orderBy = (count($expressions) > 0) ? join(" ,\n", $expressions) : '';
@@ -455,7 +455,7 @@ SQL;
      * @param array|null $appendKeys 追加列を格納した配列(値=列名)
      * @return string
      */
-    public function groupBySyntax(string $tableName, string $tableAlias = null, ?array $excludeKeys = [], ?array $appendKeys = []): string
+    public function groupBySyntax(string $tableName, ?string $tableAlias = null, ?array $excludeKeys = [], ?array $appendKeys = []): string
     {
         $expressions = $this->groupByExpressions($tableName, $tableAlias, $excludeKeys, $appendKeys);
         $groupBy = (count($expressions) > 0) ? join(" ,\n", $expressions) : '';

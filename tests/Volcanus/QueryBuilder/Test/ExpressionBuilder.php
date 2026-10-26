@@ -13,7 +13,7 @@ use Volcanus\QueryBuilder\ExpressionBuilderInterface;
 class ExpressionBuilder implements ExpressionBuilderInterface
 {
 
-    public function resultColumn(string $expr, string $alias = null): string
+    public function resultColumn(string $expr, ?string $alias = null): string
     {
         return (isset($alias)) ? $expr . ' AS "' . $alias . '"' : $expr;
     }
