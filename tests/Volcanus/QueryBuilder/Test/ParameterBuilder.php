@@ -19,12 +19,12 @@ class ParameterBuilder extends AbstractParameterBuilder implements ParameterBuil
         return sprintf("'%s'", $value);
     }
 
-    public function toInt(mixed $value, string $type = null): string
+    public function toInt(mixed $value, ?string $type = null): string
     {
         return sprintf('%d', $value);
     }
 
-    public function toFloat(mixed $value, string $type = null): string
+    public function toFloat(mixed $value, ?string $type = null): string
     {
         return (string)$value;
     }

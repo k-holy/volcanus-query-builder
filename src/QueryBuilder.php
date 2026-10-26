@@ -17,12 +17,12 @@ use Volcanus\Database\Driver\DriverInterface;
  */
 class QueryBuilder
 {
-    const NOW = 'NOW';
-    const MAX = 'MAX';
-    const MIN = 'MIN';
+    const string NOW = 'NOW';
+    const string MAX = 'MAX';
+    const string MIN = 'MIN';
 
-    const PREFIX_NEGATIVE = '!';
-    const PREFIX_NO_CONVERT = '#';
+    const string PREFIX_NEGATIVE = '!';
+    const string PREFIX_NO_CONVERT = '#';
 
     /**
      * ファサードクラスを生成します。
